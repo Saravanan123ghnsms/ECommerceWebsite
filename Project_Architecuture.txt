@@ -1,0 +1,26 @@
+project-root/
+├── server/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── app.js
+│   ├── tests/
+│   ├── .env.example
+│   └── package.json
+├── client/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── App.js
+│   ├── .env.example
+│   └── package.json
+├── .gitignore
+├── docker-compose.yml
+└── README.md

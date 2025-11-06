@@ -13,14 +13,24 @@ class DBConnectionMangoose {
     async connect() {
         try {
             if (!this.isConnected) {
+                
                 console.log("Creating the New Mongoose Connection....");
-             await mongoose.connect(uri, {
+                try{
+                    await mongoose.connect(uri, {
                     maxPoolSize: 150, 
                     serverSelectionTimeoutMS: 5000,
                 });
 
                 this.isConnected = true;
                 console.log("Mongoose Connection Established Successfully...");
+
+                }
+                catch(e){
+                        console.error("❌ Mongoose connection error:", e.message);
+                        console.error("Full error details:", e);
+                        throw e;
+                }
+
                 
             }
             return this.isConnected;

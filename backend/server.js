@@ -1,7 +1,11 @@
 require('dotenv').config();
 const express = require('express');
+const pino = require('pino');
+const pinoHttp = require('pino-http');
 const UserRouter = require('./src/routes/user.routes');
+const ProductRouter = require('./src/routes/product.routes');
 const {DBConnectionMangoose} = require('./src/config/dbusingmangoose');
+const globalHandlerFunction = require('./src/middleware/GlobalErrorHandler');
 const logger = require('./src/utils/logger');
 
 
@@ -20,19 +24,20 @@ const connectDB = new DBConnectionMangoose();
 
 const app = express();
 
+
 /* The express.json() is a built-in middleware in Express. It helps your app read JSON data sent from the client (like in POST or PUT requests) and makes it available in req.body. Without it, Express cannot understand JSON data in requests. */
 
 app.use(express.json());
+
+app.use(pinoHttp({logger : logger}));
 
 
 
 
 app.use('/api/user',UserRouter);
+app.use('/api/product',ProductRouter);
 
-app.use((err,req,res,next) => {
-    logger.error({ err }, '❌ Server Error');
-    res.status(err.status || 500 ).json({message : err.message || 'Server Error!!!'});
-});
+app.use(globalHandlerFunction);
 
 
 const port = 3000;

@@ -16,6 +16,7 @@ function globalHandlerFunction(err,req,res,next){
     //     response.stack = err.stack;
     //  }
 
+     // Here return is no needed because it is the last one executing here so ....there is no point of using the return keyword here..
      res.status(status).json(response);
 }
 

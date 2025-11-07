@@ -20,6 +20,7 @@ class ProductService{
     }
 
     async  getProductsByCategory(category){
+      logger.info('Reacted getProductByCategory function');
       try{
         const categoryName = await Category.findOne({name : category});
         if(!categoryName){

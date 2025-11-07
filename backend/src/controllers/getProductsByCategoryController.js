@@ -3,6 +3,7 @@ const logger = require('../utils/logger');
 const AppError = require('../utils/AppError');
 
 async function getAllProductsByCategoryController(req,res,next){
+     
       try{
          
          if(!req.body?.category){

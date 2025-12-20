@@ -37,6 +37,7 @@ app.use(pinoHttp({logger : logger}));
 app.use('/api/user',UserRouter);
 app.use('/api/product',ProductRouter);
 
+
 app.use(globalHandlerFunction);
 
 

@@ -43,7 +43,7 @@ async function registerUser({name ,email, password}){
 
      await user.save();
 
-     const token = generateToken({id : user._id, email : user.email});
+   //   const token = generateToken({id : user._id, email : user.email});
 
      const safeUser = {
          id : user._id,
@@ -53,7 +53,7 @@ async function registerUser({name ,email, password}){
      };
 
      
-     return {user : safeUser , authToken : token};
+     return {user : safeUser };
 
 
 };

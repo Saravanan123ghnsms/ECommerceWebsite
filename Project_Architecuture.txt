@@ -109,3 +109,226 @@ Add input validation (Joi or express-validator), centralized error handler, unit
 Monitoring, Logging & CI/CD
 
 Logging (winston), health checks, GitHub Actions CI, deploy to a host (Heroku/Vercel/Cloud Run/Azure), backups and alerts.
+
+---------------planned apis -------------------------------------------------------
+Nice — great progress so far! Below I mapped out a practical, mostly complete API surface for a typical e-commerce app, organized by domain. For each endpoint I show method + path, purpose, auth requirements, important behaviors (pagination, filtering, validation), and recommended status codes. I also add MVP prioritization and a few extra engineering notes (security, idempotency, docs).
+
+---
+
+# Suggested API endpoints (by domain)
+
+## 1. Authentication & Users
+
+* `POST /api/auth/register` — register user (body: name, email, password, etc.) → `201` (hash password).
+* `POST /api/auth/login` — email+password → returns `200` + `{ token, refreshToken? }`.
+* `POST /api/auth/refresh` — refresh access token (refresh token flow) → `200`.
+* `POST /api/auth/logout` — revoke refresh token / clear cookie → `204`.
+* `GET /api/user/:id` — get user profile → `200` (auth optional or owner/admin).
+* `PATCH /api/user/:id` — partial update user → `200` (auth + owner/admin).
+* `DELETE /api/user/:id` — delete user (soft delete recommended) → `204` (auth + admin/owner).
+* `POST /api/user/:id/change-password` — change password (require current password) → `200` + reissue token.
+* `POST /api/user/forgot-password` & `POST /api/user/reset-password` — email reset flow.
+
+Notes: Use `PATCH` for partial updates, include `tokenVersion` or `tokenInvalidBefore` for token revocation.
+
+---
+
+## 2. Products & Catalog
+
+* `POST /api/products` — create product (admin) → `201`.
+* `GET /api/products` — list products with pagination, filtering, sorting, full-text search. Query params: `page`, `limit`, `q`, `category`, `minPrice`, `maxPrice`, `sort=price:asc`, `brand`, `inStock`. → `200`.
+* `GET /api/products/:id` — get single product (include images, variants, avgRating) → `200`.
+* `PATCH /api/products/:id` — update product (admin) → `200`.
+* `DELETE /api/products/:id` — delete product (admin, soft delete preferred) → `204`.
+* `POST /api/products/:id/images` — upload images (multipart/form-data) → `201`.
+* `GET /api/products/:id/reviews` — paged product reviews → `200`.
+
+Notes: Return `total`, `page`, `limit`, `data[]`. Support `populate`/`include` flags for relationships.
+
+---
+
+## 3. Categories / Attributes / Brands
+
+* `GET /api/categories` — list categories (tree) → `200`.
+* `POST /api/categories` — create category (admin) → `201`.
+* `PATCH /api/categories/:id` — update category (admin) → `200`.
+* `DELETE /api/categories/:id` — delete category (admin) → `204`.
+* `GET /api/brands`, `POST /api/brands` (admin) — optional.
+
+---
+
+## 4. Cart & Wishlist (client-side or server cart)
+
+* `GET /api/cart` — get current user cart → `200` (auth).
+* `POST /api/cart` — add item `{ productId, quantity, variant? }` → `201` or `200`.
+* `PATCH /api/cart/items/:itemId` — update quantity → `200`.
+* `DELETE /api/cart/items/:itemId` — remove item → `204`.
+* `POST /api/wishlist` / `GET /api/wishlist` / `DELETE /api/wishlist/:id` — wishlist endpoints (auth).
+
+Design note: Cart can be persisted in DB or ephemeral; support merge-on-login.
+
+---
+
+## 5. Orders & Checkout
+
+* `POST /api/orders/checkout` — create order from cart (body: shippingAddress, paymentMethod, coupon) → `201` (returns order id, payment info).
+* `GET /api/orders` — list user orders (auth + pagination) → `200`.
+* `GET /api/orders/:id` — order details → `200` (owner/admin).
+* `POST /api/orders/:id/pay` — handle payment webhook/initiate (idempotent) → `200`.
+* `POST /api/orders/:id/cancel` — cancel order (if allowed) → `200` or `400`.
+* `POST /api/orders/:id/return` — return request → `200`.
+* Webhooks: `POST /api/webhooks/payment-provider` — payment provider callback (validate signature).
+
+Important: Use idempotency keys for payment endpoints and validate webhooks.
+
+---
+
+## 6. Payments
+
+* `POST /api/payments/session` — create/payment session (Stripe/PayPal) → `200` (returns client secret/redirect URL).
+* `POST /api/payments/confirm` — confirm payment (if needed) → `200`.
+* Webhook endpoint as above.
+
+Security: verify webhook signature and mark order paid only on verified notifications.
+
+---
+
+## 7. Shipping & Addresses
+
+* `GET /api/addresses` — list user addresses → `200`.
+* `POST /api/addresses` — add address → `201`.
+* `PATCH /api/addresses/:id` — update address → `200`.
+* `DELETE /api/addresses/:id` → `204`.
+* `GET /api/shipping/rates` — calculate shipping rates for an order/cart → `200`.
+
+---
+
+## 8. Reviews & Ratings
+
+* `POST /api/products/:id/reviews` — create review (auth + purchased check optional) → `201`.
+* `GET /api/products/:id/reviews` — list reviews → `200`.
+* `PATCH /api/reviews/:id` — edit review (owner) → `200`.
+* `DELETE /api/reviews/:id` — delete review (owner/admin) → `204`.
+
+---
+
+## 9. Admin / Analytics
+
+* `GET /api/admin/orders` — admin view for orders (filters) → `200`.
+* `GET /api/admin/dashboard` — metrics: sales, revenue, top products → `200`.
+* `POST /api/admin/seed` — (dev only) seed products.
+
+Protect with role-based auth.
+
+---
+
+## 10. Search, Suggestions, Filtering
+
+* `GET /api/search` — search products, categories, suggestions `q`, `type=product|category`, `size=10` → `200`.
+* `GET /api/suggestions?q=..` — autocomplete.
+
+Implement indexes for text search; consider Elastic/Lucene for scale.
+
+---
+
+## 11. Static & File Uploads
+
+* `POST /api/uploads` — upload file(s) (images), return URL(s) → `201` (use S3 or cloud storage).
+* Serve images via CDN or signed URLs.
+
+---
+
+## 12. Notifications / Messaging
+
+* `POST /api/notifications` (admin) — send system notifications.
+* `GET /api/notifications` — fetch user notifications.
+* Consider WebSockets for live order status updates.
+
+---
+
+## 13. Misc (utility)
+
+* Health: `GET /health` → `200` (used by load balancers).
+* `GET /api/config` — client-side config (public keys).
+* Rate-limiting endpoints: `POST /api/auth/login` — protect with rate-limit.
+
+---
+
+# Recommended responses & status codes (summary)
+
+* Success: `200 OK`, `201 Created` (resource created), `204 No Content` (delete success no body).
+* Client error: `400 Bad Request` (validation), `401 Unauthorized`, `403 Forbidden`, `404 Not Found`, `409 Conflict`.
+* Server: `500 Internal Server Error`.
+  Use `422 Unprocessable Entity` for validation errors where appropriate.
+
+---
+
+# MVP priority (what to build first)
+
+1. Auth: register/login, JWT, refresh.
+2. User: profile get/update.
+3. Products: create/list/get (basic filters + pagination).
+4. Cart: add/remove/list.
+5. Checkout/Orders: create order, simple payment stub.
+6. Admin product CRUD + image uploads.
+7. Reviews, addresses, search.
+   Then payments, webhooks, analytics, optimizations.
+
+---
+
+# Engineering tips & patterns
+
+* Use `PATCH /api/resource/:id` for partial updates.
+* Validate bodies with Joi / express-validator.
+* Use `AppError` pattern + central error handler (you already have it).
+* Use pagination metadata: `{ total, page, limit, pages, data }`.
+* Use role-based middleware `auth` + `authorize('admin')`.
+* Idempotency keys for payment/order creation (header: `Idempotency-Key`).
+* Log requests/responses and errors with pino (structured JSON).
+* API versioning: `/api/v1/...` for breaking changes.
+* Document with OpenAPI/Swagger.
+* Rate-limit sensitive endpoints (login, register).
+
+---
+
+# Example: important request bodies (quick)
+
+**Create product (admin)**
+
+```json
+POST /api/products
+{
+  "title":"Wireless Mouse",
+  "description":"...",
+  "price": 999,
+  "inventory": 200,
+  "category": "electronics",
+  "images": ["https://.../1.jpg"],
+  "variants": [{ "color":"black", "sku":"WM-001", "stock": 20 }]
+}
+```
+
+**Create order (checkout)**
+
+```json
+POST /api/orders/checkout
+{
+  "cartId": "abc",
+  "shippingAddress": { "line1":"...", "city":"...", "pin":"..." },
+  "paymentMethod": "stripe",
+  "items": [{ "productId":"...", "qty": 2, "price": 999 }]
+}
+```
+
+---
+
+If you want, I can:
+
+* Generate Express route skeletons for the top **MVP** endpoints (controllers + routes).
+* Create a suggested Mongo/Mongoose schema for Product, Order, Cart, User, and sample endpoints.
+* Produce an OpenAPI spec (partial) for your current APIs.
+
+Which of those would you like me to build next?
+
+
+

@@ -9,7 +9,7 @@ async function getAllProductsController(req,res,next){
       }
       catch(e){
          logger.error('An Error Occured in getAllProducts Controllers',e);
-         throw e;
+         return next(e);
       }
 }
 

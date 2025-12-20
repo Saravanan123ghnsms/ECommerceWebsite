@@ -9,18 +9,23 @@ const ProductSchema = new Schema({
         type : String,
         required : true
     },
-    description : String,
+    description : {
+        type : String,
+        required : true
+    } ,
     price :{
         type : Number,
         required : true,
     },
     stock : {
         type : Number,
-        default : 0
+        default : 0,
+        required : true
     },
     imageUrl : {
         type : String,
-        default : ""
+        default : "",
+        required : true
     },
     category :{
         type : Schema.Types.ObjectId,

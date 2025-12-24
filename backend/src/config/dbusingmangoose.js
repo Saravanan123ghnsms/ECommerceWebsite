@@ -1,10 +1,11 @@
-
 const mongoose = require('mongoose');
 
 
 // we are using mangoose nodejs orm for the schema validataion..
 
 const uri = "mongodb://localhost:27017/ECommerceDB";
+
+const cloud_mongoose_uri =process.env.MONGO_DB_CONNECTION_STRING
 
 class DBConnectionMangoose {
     constructor() {
@@ -15,8 +16,9 @@ class DBConnectionMangoose {
             if (!this.isConnected) {
                 
                 console.log("Creating the New Mongoose Connection....");
+                console.log("here is the monoose url : ",cloud_mongoose_uri)
                 try{
-                    await mongoose.connect(uri, {
+                    await mongoose.connect(cloud_mongoose_uri, {
                     maxPoolSize: 150, 
                     serverSelectionTimeoutMS: 5000,
                 });
@@ -44,6 +46,8 @@ class DBConnectionMangoose {
 
     }
 }
+
+
 
 module.exports = { DBConnectionMangoose};
 

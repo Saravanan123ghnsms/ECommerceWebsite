@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "name": "Launch  backend/server.js",
             "type": "node",
@@ -19,8 +20,16 @@
             "autoAttachChildProcesses": true,
                "env": {
             "NODE_ENV": "development"
-         },
+         }
+         
            
-        }
+        },
+     {
+      "name": "Debug React App",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/src"
+    }
     ]
 }

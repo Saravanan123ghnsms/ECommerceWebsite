@@ -1,9 +1,12 @@
+import LoginProvider from "./context/LoginProvider";
 import Login from "./pages/Login";
 
 function App() {
   return (
     <div className="App">
-      <Login />
+      <LoginProvider>
+        <Login />
+      </LoginProvider>
     </div>
   );
 }

@@ -7,6 +7,7 @@ const ProductRouter = require('./src/routes/product.routes');
 const {DBConnectionMangoose} = require('./src/config/dbusingmangoose');
 const globalHandlerFunction = require('./src/middleware/GlobalErrorHandler');
 const logger = require('./src/utils/logger');
+const cors = require('cors')
 
 
 const connectDB = new DBConnectionMangoose();
@@ -23,6 +24,13 @@ const connectDB = new DBConnectionMangoose();
 
 
 const app = express();
+
+// To implement cors globally
+
+app.use(cors({
+  origin : "*",
+  methods : ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+}))
 
 
 /* The express.json() is a built-in middleware in Express. It helps your app read JSON data sent from the client (like in POST or PUT requests) and makes it available in req.body. Without it, Express cannot understand JSON data in requests. */

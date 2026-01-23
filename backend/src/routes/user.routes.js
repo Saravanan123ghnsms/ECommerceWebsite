@@ -1,10 +1,10 @@
 const express = require('express');
 const Userrouter = express.Router();
 
-const {userRegisterController} = require('../controllers/postUserRegisterController');
-const { userLoginController } = require('../controllers/postUserLoginController');
-const  { updateUserController } = require('../controllers/postUpdateUserController');
-const { postDeleteController } = require('../controllers/postDeleteUserController');
+const {userRegisterController} = require('../controllers/Users/postUserRegisterController');
+const { userLoginController } = require('../controllers/Users/postUserLoginController');
+const  { updateUserController } = require('../controllers/Users/postUpdateUserController');
+const { postDeleteController } = require('../controllers/Users/postDeleteUserController');
  
 
 // POST /api/register

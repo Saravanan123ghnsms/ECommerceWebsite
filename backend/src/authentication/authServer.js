@@ -23,6 +23,7 @@ async function registerUser({name ,email, password}){
 
      // checking if the user is already exists....
      const existing = await User.findOne({email});
+     
 
      if(existing){
         const err = new Error("User is already Registered!!!");

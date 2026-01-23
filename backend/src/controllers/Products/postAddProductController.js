@@ -1,5 +1,5 @@
-const logger = require('../utils/logger');
-const ProductService = require('../services/product.service.js');
+const logger = require('../../utils/logger.js');
+const ProductService = require('../../services/product.service.js');
 
 
 

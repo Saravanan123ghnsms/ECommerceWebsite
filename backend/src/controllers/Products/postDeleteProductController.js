@@ -1,6 +1,6 @@
-const  ProductService = require('../services/product.service');
-const AppError = require('../utils/AppError');
-const logger = require('../utils/logger');
+const  ProductService = require('../../services/product.service');
+const AppError = require('../../utils/AppError');
+const logger = require('../../utils/logger');
 
 async function deleteProductController(req,res,next){
       try{

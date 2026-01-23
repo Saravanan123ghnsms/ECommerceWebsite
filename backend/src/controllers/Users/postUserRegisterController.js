@@ -1,5 +1,5 @@
 
-const { registerUser } = require('../authentication/authServer');
+const { registerUser } = require('../../authentication/authServer');
 
 
 async function userRegisterController(req,res,next){

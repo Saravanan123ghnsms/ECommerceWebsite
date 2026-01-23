@@ -1,6 +1,6 @@
-const  ProductService = require('../services/product.service');
-const logger = require('../utils/logger');
-const AppError = require('../utils/AppError');
+const  ProductService = require('../../services/product.service');
+const logger = require('../../utils/logger');
+const AppError = require('../../utils/AppError');
 
 async function getAllProductsByCategoryController(req,res,next){
      

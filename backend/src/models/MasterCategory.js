@@ -5,7 +5,7 @@ const {Schema} = mongoose;
 
 
 
-const CategorySchema = new Schema({
+const MasterCategorySchema = new Schema({
     name: {
         type: String,
         required: true
@@ -14,28 +14,18 @@ const CategorySchema = new Schema({
         type: String,
         required: true,
     },
-    masterCategory: {
-        type: Schema.Types.ObjectId,
-        ref: "MasterCategory",
-        required: true
-    },
-    imageUrl: {
+    iconUrl: {
         type: String,
         required: true,
+        unique: true
     },
-    bannerUrl: {
-        type: String,
-        required: true,
-       
+    bannerUrl : {
+        type : String,
+        required : false,
     },
-    isActive: {
-        type: Boolean,
+    isActive : {
+        type : Boolean,
         required: true
-    },
-    metadata : {
-        type : [Schema.Types.ObjectId],
-        ref : "CategoryMetadata",
-        required : true
     },
     displayOrder : {
         type : Schema.Types.Int32,
@@ -49,7 +39,7 @@ const CategorySchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : "users"
     }
-
 }, { timestamps: true });
 
-module.exports = mongoose.model("Category", CategorySchema)
+
+module.exports = mongoose.model("MasterCategory", MasterCategorySchema)

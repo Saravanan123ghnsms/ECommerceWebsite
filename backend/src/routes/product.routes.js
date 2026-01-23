@@ -1,12 +1,12 @@
 const express = require('express');
 const Productrouter = express.Router();
 
-const getAllProductsByCategoryController = require('../controllers/getProductsByCategoryController');
-const getAllProducts = require('../controllers/getAllProductsController');
-const postAddProductController = require('../controllers/postAddProductController');
-const getProductController = require('../controllers/getProductController');
-const deleteProductController = require('../controllers/postDeleteProductController');
-const updateProductController = require('../controllers/postUpdateProductController');
+const getAllProductsByCategoryController = require('../controllers/Products/getProductsByCategoryController');
+const getAllProducts = require('../controllers/Products/getProductController');
+const postAddProductController = require('../controllers/Products/postAddProductController');
+const getProductController = require('../controllers/Products/getProductController');
+const deleteProductController = require('../controllers/Products/postDeleteProductController');
+const updateProductController = require('../controllers/Products/postUpdateProductController');
 
  
 

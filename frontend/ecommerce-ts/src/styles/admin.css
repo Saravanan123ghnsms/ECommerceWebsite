@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Science+Gothic:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --font-play: "Play", sans-serif;
+}
+
+.customBgColor {
+    background: linear-gradient(to right, rgb(1, 1, 60), rgb(6, 3, 18));
+}
+
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.adminPage {
+    min-height: 100vh;
+    background-color: whitesmoke;
+    width: 100%;
+    display: flex;
+    font-family: "Play", sans-serif;
+
+}
+
+.sideBar {
+    padding: 2rem;
+    background: linear-gradient(to right, rgb(1, 1, 60), rgb(6, 3, 18));
+    min-width: 18%;
+    min-height: 100%;
+    color: grey;
+    color: rgb(94, 208, 208);
+}
+
+.combo {
+    margin-top: .8drem;
+} */

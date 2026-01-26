@@ -1,12 +1,12 @@
-import React from 'react'
 
 type buttonType = {
-    title: string
+    title: string,
+    onClick?: (e: any) => any
 }
 
-const Button = ({ title }: buttonType) => {
+const Button = ({ title, onClick }: buttonType) => {
     return (
-        <button className='py-3 px-4 bg-blue-950 text-white rounded cursor-pointer'>
+        <button className='py-3 px-4 bg-blue-950 text-white rounded cursor-pointer' onClick={onClick}>
             {title}
         </button>
     )

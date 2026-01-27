@@ -7,6 +7,12 @@ type metadataType = {
 
 type metadataActionType = "Create" | "Edit" | "List";
 
+type isShowType = {
+    generalInfo: boolean,
+    imageInfo: boolean,
+    metadataInfo: boolean
+}
+
 type initialCreateCategoryContext = {
     metadata: metadataType[],
     setMetaData: React.Dispatch<React.SetStateAction<metadataType[]>>,
@@ -18,7 +24,10 @@ type initialCreateCategoryContext = {
     setMetadataValues: React.Dispatch<React.SetStateAction<string[]>>
     handleAddMetaData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
     metadataAction: metadataActionType,
-    setMetadataAction: React.Dispatch<React.SetStateAction<metadataActionType>>
+    setMetadataAction: React.Dispatch<React.SetStateAction<metadataActionType>>,
+    handleCreateCategory: (e: React.FormEvent<HTMLFormElement>) => void,
+    isShow: isShowType,
+    setIsShow: React.Dispatch<React.SetStateAction<isShowType>>
 }
 
 export const CreateCategoryContext = createContext<initialCreateCategoryContext | null>(null);
@@ -29,8 +38,6 @@ type createCategoryProviderType = {
 
 const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
 
-
-
     const [metadata, setMetaData] = useState<metadataType[]>([]);
 
     const [initialValueCount, setInitialValueCount] = useState(1);
@@ -39,6 +46,13 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
 
     const [metadataValues, setMetadataValues] = useState<string[]>([]);
 
+
+    const [isShow, setIsShow] = useState<isShowType>({
+        generalInfo: false,
+        imageInfo: false,
+        metadataInfo: false
+    });
+
     const handleAddMetaData = (e: React.MouseEvent<HTMLButtonElement>
     ) => {
         e.preventDefault();
@@ -46,13 +60,22 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             title: metadataTitle,
             values: metadataValues
         }
-
         setMetaData([...metadata, newMetaData]);
-
         setMetadataAction("List");
+        setMetadataTitle("");
+        setMetadataValues([]);
 
         console.log(newMetaData);
     }
+
+    const handleCreateCategory = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+
+        console.log(Object.fromEntries(formData))
+    }
+
+
 
     const [metadataAction, setMetadataAction] = useState<metadataActionType>("List");
 
@@ -68,7 +91,10 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             setMetadataValues,
             handleAddMetaData,
             metadataAction,
-            setMetadataAction
+            setMetadataAction,
+            handleCreateCategory,
+            isShow,
+            setIsShow
         }}>
             {children}
         </CreateCategoryContext.Provider>

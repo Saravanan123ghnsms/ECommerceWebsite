@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
-import { CreateCategoryContext } from '../../../context/CreateCategoryProvider'
+import { useContext } from 'react';
 import { MdEditSquare } from "react-icons/md";
 import { RiDeleteBin7Fill } from "react-icons/ri";
+import { CreateCategoryContext } from '../../../context/CreateCategoryProvider';
 
 const ListAllMetadata = () => {
 
@@ -14,7 +14,6 @@ const ListAllMetadata = () => {
 
     return (
         <div className='text-center p-2'>
-
             <div className="grid grid-cols-[50px_250px_1fr_200px] gap-20 bg-gray-300 p-4 rounded-lg font-bold">
                 <div className="flex justify-center">
                     <input type="checkbox" className="scale-150 cursor-pointer" />
@@ -23,18 +22,14 @@ const ListAllMetadata = () => {
                 <div className='flex'>Values</div>
                 <div className="text-center">Actions</div>
             </div>
-
             {
-
                 metadata.length ?
-
                     <div className="flex flex-col mt-0">
                         {metadata.map((data, index) => (
                             <div
                                 key={index}
                                 className="grid grid-cols-[50px_250px_1fr_200px] gap-20 bg-white p-4 mt-4 rounded-lg items-center shadow-sm"
                             >
-
                                 <div className="flex justify-center">
                                     <input type="checkbox" className="scale-150 cursor-pointer" />
                                 </div>

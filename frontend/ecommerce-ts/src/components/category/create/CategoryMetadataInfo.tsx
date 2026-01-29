@@ -5,6 +5,7 @@ import CreateMetadata from './CreateMetadata';
 import ListAllMetadata from './ListAllMetadata';
 import { useContext } from "react";
 import { CreateCategoryContext } from "../../../context/CreateCategoryProvider";
+import EditMetadata from "./EditMetadata";
 
 const CategoryMetadataInfo = () => {
 
@@ -40,14 +41,22 @@ const CategoryMetadataInfo = () => {
                         <div className="">Create</div>
                         <div className={`absolute top-7 w-0 min-h-0.5 transition-all duration-700 ${metadataAction === 'Create' && "w-full bg-blue-950"}`}></div>
                     </div>
+
+                    <div className={`cursor-pointer flex justify-center relative p-0.5 ${metadataAction === 'Edit' && "text-blue-950 font-semibold"}`} onClick={() => setMetadataAction("Edit")}>
+                        <div className="">Edit</div>
+                        <div className={`absolute top-7 w-0 min-h-0.5 transition-all duration-700 ${metadataAction === 'Edit' && "w-full bg-blue-950"}`}></div>
+                    </div>
                 </div>
 
                 <div data-div="add-metadata" className='bg-stone-50 flex flex-col justify-center border p-2 rounded'>
                     {
                         metadataAction === 'List' ?
                             <ListAllMetadata />
-                            :
-                            <CreateMetadata />
+                            : metadataAction === 'Create' ?
+                                <CreateMetadata />
+                                :
+                                <EditMetadata />
+
                     }
                 </div>
 

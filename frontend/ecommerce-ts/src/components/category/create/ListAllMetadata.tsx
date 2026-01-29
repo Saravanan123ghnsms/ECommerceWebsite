@@ -10,7 +10,7 @@ const ListAllMetadata = () => {
         throw new Error("Create Category Context is missing...");
     }
 
-    const { metadata } = context;
+    const { metadata, setEditMetadataIndex, setMetadataAction } = context;
 
     return (
         <div className='text-center p-2'>
@@ -46,7 +46,11 @@ const ListAllMetadata = () => {
 
                                 <div className="flex justify-center gap-7 text-2xl">
                                     {/* <LuView className="cursor-pointer" /> */}
-                                    <MdEditSquare className="cursor-pointer" />
+                                    <MdEditSquare className="cursor-pointer" onClick={() => {
+                                        setEditMetadataIndex(index + 1);
+                                        setMetadataAction("Edit");
+                                        // console.log(index + 1)
+                                    }} />
                                     <RiDeleteBin7Fill className="cursor-pointer" />
                                 </div>
                             </div>

@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { CreateCategoryContext } from '../../../context/CreateCategoryProvider';
 import { FaPlusSquare } from "react-icons/fa";
 import Button from '../../common/Button';
+import { IoClose } from "react-icons/io5";
 
 const CreateMetadata = () => {
     const context = useContext(CreateCategoryContext);
@@ -10,6 +11,9 @@ const CreateMetadata = () => {
     }
 
     const { metadataTitle, setMetadataTitle, initialValueCount, setInitialValueCount, metadataValues, setMetadataValues, handleAddMetaData } = context;
+
+
+
     return (
         <div>
             <div className='text-center text-lg font-black'>Add Metadata</div>
@@ -28,20 +32,25 @@ const CreateMetadata = () => {
                 <div className='flex flex-col w-1/2'>
                     <div className='flex justify-between' >
                         <label>Add Value</label>
-                        <FaPlusSquare className="text-3xl cursor-pointer text-green-600" onClick={() => setInitialValueCount(pre => pre + 1)} />
+                        <FaPlusSquare className="text-3xl cursor-pointer text-green-600" onClick={() => setMetadataValues(pre => [...pre, ""])} />
                     </div>
-                    {[...Array(initialValueCount).keys()].map((i, index) => (
-                        <div key={i} className="flex items-center w-full pt-2">
+                    {metadataValues.map((i, index) => (
+                        <div key={index} className="flex items-center w-full pt-2 gap-2">
                             <input
                                 type="text"
                                 placeholder="Add Values"
                                 className="border w-full p-2 flex"
+                                value={i}
                                 onChange={(e) => {
                                     const updateList = [...metadataValues];
                                     updateList[index] = e.target.value;
                                     setMetadataValues(updateList);
                                 }}
                             />
+
+                            <IoClose className='text-3xl text-red-500 cursor-pointer' onClick={() => {
+                                setMetadataValues(metadataValues.filter((_, i) => i !== index))
+                            }} />
 
                         </div>
                     ))}

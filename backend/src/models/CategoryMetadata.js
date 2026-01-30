@@ -8,10 +8,6 @@ const CategoryMetadataSchema = new Schema({
         type: String,
         required: true
     },
-    description: {
-        type: String,
-        required: true,
-    },
     values : {
         type : [String],
         required : true     

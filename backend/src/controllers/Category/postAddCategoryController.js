@@ -12,7 +12,7 @@ async function postAddCategoryController(req,res,next){
     }
     catch(e){
 
-        logger.error(r,"An Error Occured in Post Add Category Controller");
+        logger.error(e,"An Error Occured in Post Add Category Controller");
         return next(e);
 
     }

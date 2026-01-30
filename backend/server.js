@@ -4,6 +4,8 @@ const pino = require('pino');
 const pinoHttp = require('pino-http');
 const UserRouter = require('./src/routes/user.routes');
 const ProductRouter = require('./src/routes/product.routes');
+const CategoryRouter = require('./src/routes/category.routes');
+const MasterCategoryRouter = require('./src/routes/MasterCategory.routes')
 const {DBConnectionMangoose} = require('./src/config/dbusingmangoose');
 const globalHandlerFunction = require('./src/middleware/GlobalErrorHandler');
 const logger = require('./src/utils/logger');
@@ -44,6 +46,8 @@ app.use(pinoHttp({logger : logger}));
 
 app.use('/api/user',UserRouter);
 app.use('/api/product',ProductRouter);
+app.use('/api/category',CategoryRouter);
+app.use('/api/mastercategory',MasterCategoryRouter)
 
 
 app.use(globalHandlerFunction);

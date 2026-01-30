@@ -23,23 +23,13 @@ const CategorySchema = new Schema({
         type: String,
         required: true,
     },
-    bannerUrl: {
-        type: String,
-        required: true,
-       
-    },
     isActive: {
         type: Boolean,
         required: true
     },
     metadata : {
         type : [Schema.Types.ObjectId],
-        ref : "CategoryMetadata",
-        required : true
-    },
-    displayOrder : {
-        type : Schema.Types.Int32,
-        required : true
+        ref : "CategoryMetadata"
     },
     createdBy : {
         type : Schema.Types.ObjectId,

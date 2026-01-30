@@ -14,22 +14,9 @@ const MasterCategorySchema = new Schema({
         type: String,
         required: true,
     },
-    iconUrl: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    bannerUrl : {
-        type : String,
-        required : false,
-    },
     isActive : {
         type : Boolean,
         required: true
-    },
-    displayOrder : {
-        type : Schema.Types.Int32,
-        required : true
     },
     createdBy : {
         type : Schema.Types.ObjectId,

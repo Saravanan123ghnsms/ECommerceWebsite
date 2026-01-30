@@ -1,4 +1,5 @@
 const Category = require("../models/Category")
+const CategoryMetadataService = require('../services/categorymetadata');
 const AppError = require("../utils/AppError")
 const logger = require("../utils/logger")
 
@@ -7,20 +8,26 @@ class CategoryService {
     async addCategory(payload) {
 
         try {
-            const { name, description , iconUrl , bannerUrl , isActive , displayOrder, masterCategory,metadata,user } = payload;
+            const { name, description ,imageUrl, isActive , masterCategory,metadata,user } = payload;
+            // Meta data is a array of object 
 
-            const CategoryObj = new Category({
+            let CategoryObject = {
                 name : name,
                 description : description,
-                iconUrl : iconUrl,
-                bannerUrl : bannerUrl,
-                isActive: isActive,
-                displayOrder : displayOrder,
+                isActive: isActive, 
+                imageUrl : imageUrl,
                 masterCategory : masterCategory,
-                metadata : metadata,
                 createdBy : user,
                 updatedBy : user
-            })
+            }
+            
+            if(metadata){
+                const  categoryMetadataService = new CategoryMetadataService();
+                const metadataResult = await categoryMetadataService.addMetadata(metadata);
+                CategoryObject["metadata"] = metadataResult;
+            }
+
+            const CategoryObj = new Category(CategoryObject);
 
             const CreatedCategory = await CategoryObj.save();
 

@@ -9,7 +9,10 @@ async function protect(req,res,next){
 
         const token = authHeader.split(' ')[1];
         const user = await verifyAndGetUser(token);
-        req.user = user;
+        if(!user){
+                  return res.status(401).json({ message: 'Invalid or expired token' });
+        }
+        req.body.user = user;
         next();
     }
 
@@ -20,6 +23,6 @@ async function protect(req,res,next){
 }
 
 
-module.export = {
+module.exports = {
     protect
 };

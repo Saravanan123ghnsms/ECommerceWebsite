@@ -1,4 +1,7 @@
 const express = require('express')
+const  {protect} = require('../middleware/auth.middleware.js');
+const upload = require('../middleware/fileupload.middleware.js');
+const  uploadImageBufferToCloudinary =require('../middleware/cloudinary.uploads.js');
 
 const CategoryRouter = express.Router();
 
@@ -9,10 +12,10 @@ const postAddCategoryController = require('../controllers/Category/postAddCatego
 const  postDeleteCategoryController = require('../controllers/Category/postDeleteCategoryController');
 const postUpdateCategoryController = require('../controllers/Category/postUpdateCategoryController');
 
-CategoryRouter.get("/getCategory",getCategoryController);
-CategoryRouter.post("/addCategory",postAddCategoryController);
-CategoryRouter.post("/deleteCategory",postDeleteCategoryController);
-CategoryRouter.post("/updateCategory",postUpdateCategoryController);
+CategoryRouter.get("/getCategory",protect,getCategoryController);
+CategoryRouter.post("/addCategory",protect,upload.single("image"),uploadImageBufferToCloudinary,postAddCategoryController);
+CategoryRouter.post("/deleteCategory",protect,postDeleteCategoryController);
+CategoryRouter.post("/updateCategory",protect,postUpdateCategoryController);
 
 
 module.exports = CategoryRouter;

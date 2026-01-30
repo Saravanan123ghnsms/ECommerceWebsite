@@ -6,6 +6,7 @@ require('dotenv').config();
 
 async function uploadImageBufferToCloudinary(req,res,next){
    try{
+    logger.info("reached the clodudinary function")
     // Instatiating the cloudinary config.
      cloudinary.config({
             cloud_name : process.env.CLOUD_NAME,
@@ -30,9 +31,13 @@ async function uploadImageBufferToCloudinary(req,res,next){
 
             stream.end(req.file.buffer);
      });
-
+     
+     if(req.user){
+        req.body.user = req.user;
+     }
      req.body.imageUrl = result.secure_url;
      req.body.imagePublicID = result.public_id;
+     logger.info("Successfullu uplaod file to the clodianry");
      next();
 
   

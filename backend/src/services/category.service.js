@@ -8,8 +8,11 @@ class CategoryService {
     async addCategory(payload) {
 
         try {
+            logger.info()
             const { name, description ,imageUrl, isActive , masterCategory,metadata,user } = payload;
-            // Meta data is a array of object 
+            // Meta data is a array of object
+            
+            let Updatedmetadata = JSON.parse(metadata);
 
             let CategoryObject = {
                 name : name,
@@ -23,7 +26,7 @@ class CategoryService {
             
             if(metadata){
                 const  categoryMetadataService = new CategoryMetadataService();
-                const metadataResult = await categoryMetadataService.addMetadata(metadata);
+                const metadataResult = await categoryMetadataService.addMetadata(Updatedmetadata);
                 CategoryObject["metadata"] = metadataResult;
             }
 

@@ -39,7 +39,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use(pinoHttp({logger : logger}));
+// app.use(pinoHttp({logger : logger}));
 
 
 

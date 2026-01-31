@@ -5,7 +5,7 @@ const logger = require('../../utils/logger');
 async function updateCategoryController(req,res,next){
       try{
        
-         if(!req.query?.productId){
+         if(!req.query?.CategoryId){
              let errorObj = new AppError(400,'CategoryID is Required!!!');
              return next(errorObj);
          }

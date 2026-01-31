@@ -16,7 +16,9 @@ async function uploadImageBufferToCloudinary(req,res,next){
     const result = await new Promise((resolve,reject) => {
                 const stream = cloudinary.uploader.upload_stream({
                     folder : "uploads",  // Giving the folder name for cloudinary service.
-                    resource_type : "image"
+                    resource_type : "image",
+                    overwrite : true,
+                    public_id : `category_${req.body.name}`,
                 },
                 (error,result) => {
                     if(error){

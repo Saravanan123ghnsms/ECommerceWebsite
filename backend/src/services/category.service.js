@@ -96,7 +96,7 @@ class CategoryService {
             }
           }
     
-          const updatedCategory = await Category.findByIdAndUpdate(CategoryId, updatedPayload, { new: true, runValidators: true });
+          const updatedCategory = await Category.findByIdAndUpdate(CategoryId, updatedPayload, { new: true, runValidators: true }).populate(["masterCategory","metadata"]);
           return updatedCategory;
     
         }

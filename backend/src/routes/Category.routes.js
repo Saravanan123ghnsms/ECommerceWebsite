@@ -17,7 +17,7 @@ CategoryRouter.get("/getCategory",protect,getCategoryController);
 CategoryRouter.get("/getAllCategory",protect,getAllCategoryController);
 CategoryRouter.post("/addCategory",protect,upload.single("image"),uploadImageBufferToCloudinary,postAddCategoryController);
 CategoryRouter.post("/deleteCategory",protect,postDeleteCategoryController);
-CategoryRouter.post("/updateCategory",protect,postUpdateCategoryController);
+CategoryRouter.post("/updateCategory",protect,upload.single("image"),uploadImageBufferToCloudinary,postUpdateCategoryController);
 
 
 module.exports = CategoryRouter;

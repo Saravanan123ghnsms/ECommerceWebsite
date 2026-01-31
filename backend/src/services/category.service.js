@@ -48,16 +48,16 @@ class CategoryService {
     async getCategory(CategoryID){
 
         try{
-
-            const Category = await Category.findById(CategoryID);
-            if(!Category) {
+            
+            const CategoryRes = await Category.findById(CategoryID).populate(["masterCategory","metadata"]);
+            if(!CategoryRes) {
                 throw new AppError(400, "Category Not Found!!!");
             }
-            return Category
+            return CategoryRes
 
         }
         catch(e){
-            logging.error(e,"An Error Occured while getCategoryID in the Category Service");
+            logger.error(e,"An Error Occured while getCategoryID in the Category Service");
             throw e;
      
         }

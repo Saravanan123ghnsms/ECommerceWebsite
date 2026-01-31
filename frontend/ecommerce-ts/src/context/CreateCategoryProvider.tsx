@@ -1,9 +1,17 @@
 import { createContext, use, useState, type ReactNode } from 'react';
+import { axiosConnection } from '../axios/axiosConnection';
+import { useNavigate } from 'react-router';
 
 type metadataType = {
     id: number,
     title: string,
     values: string[]
+}
+
+type categoryMetadataNotification = {
+    isShow: boolean;
+    title: string;
+    message: string;
 }
 
 type metadataActionType = "Create" | "Edit" | "List";
@@ -30,7 +38,10 @@ type initialCreateCategoryContext = {
     isShow: isShowType,
     setIsShow: React.Dispatch<React.SetStateAction<isShowType>>,
     editMetadataIndex: number,
-    setEditMetadataIndex: React.Dispatch<React.SetStateAction<number>>
+    setEditMetadataIndex: React.Dispatch<React.SetStateAction<number>>,
+    categoryMetadataNotification: categoryMetadataNotification,
+    setCategoryMetadataNotification: React.Dispatch<React.SetStateAction<categoryMetadataNotification>>
+
     //     editMetaDataTitle: string | undefined,
     //     setEditMetadataTitle: React.Dispatch<React.SetStateAction<string | undefined>>,
     //     editMetadataValues: string[] | undefined,
@@ -45,6 +56,10 @@ type createCategoryProviderType = {
 }
 
 const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
+
+    const navigate = useNavigate()
+
+    const CREATE_CATEGORY_URL = "/api/category/addCategory";
 
     const [metadata, setMetaData] = useState<metadataType[]>([]);
 
@@ -64,31 +79,69 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
         metadataInfo: false
     });
 
+    const [categoryMetadataNotification, setCategoryMetadataNotification] = useState<categoryMetadataNotification>({
+        isShow: false,
+        title: '',
+        message: ''
+    });
+
     const handleAddMetaData = (e: React.MouseEvent<HTMLButtonElement>
     ) => {
         e.preventDefault();
-
         const newMetaData: metadataType = {
             id: metadata.length > 0 ? metadata[metadata.length - 1].id + 1 : 1,
             title: metadataTitle,
             values: metadataValues
         }
         setMetaData([...metadata, newMetaData]);
+        setCategoryMetadataNotification({
+            isShow: true,
+            title: "Success",
+            message: "Metadata Created Successfully!!!"
+        })
+        setTimeout(() => {
+            setCategoryMetadataNotification({
+                isShow: false,
+                title: "",
+                message: "!!!"
+            })
+        }, 4000)
+
         setMetadataAction("List");
         setMetadataTitle("");
         setMetadataValues([""]);
         setInitialValueCount(1);
     }
 
-    const handleCreateCategory = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleCreateCategory = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        // const newMetadata = {}
-        formData.append("metadata", JSON.stringify(metadata)    );
-
-
-
+        formData.append("masterCategory", "697a474718220aaea25b45bf")
+        const modifiedMetadata = metadata.map((item) => {
+            return { title: item.title, values: item.values }
+        })
+        formData.append("metadata", JSON.stringify(modifiedMetadata));
         console.log(Object.fromEntries(formData))
+
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.log("Bearer Token is missing...")
+        }
+        try {
+            const result = await axiosConnection.post(CREATE_CATEGORY_URL, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": "Bearer " + token
+                }
+            })
+            console.log(result);
+            navigate("/admin/category-list");
+
+        }
+        catch (e) {
+            console.log(e);
+        }
+
     }
 
 
@@ -112,7 +165,9 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             isShow,
             setIsShow,
             editMetadataIndex,
-            setEditMetadataIndex
+            setEditMetadataIndex,
+            categoryMetadataNotification,
+            setCategoryMetadataNotification
             // editMetaDataTitle,
             // setEditMetadataTitle,
             // editMetadataValues,

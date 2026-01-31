@@ -20,19 +20,19 @@ const CategoryGeneralInfo = () => {
                     <div data-div="desc">To add a general info</div>
                 </div>
                 <div>
-                    <FaCaretRight className={`${isShow.generalInfo ? "rotate-90" : "rotate-0"} transition-all duration-300 text-3xl p-1 cursor-pointer rounded-full hover:bg-gray-100`} onClick={() => setIsShow({ ...isShow, generalInfo: !isShow.generalInfo })} />
+                    <FaCaretRight className={`${isShow.generalInfo ? "rotate-90" : "rotate-0"} transition-all duration-300 text-3xl p-1 cursor-pointer rounded-full bg-gray-100 hover:bg-gray-200`} onClick={() => setIsShow({ ...isShow, generalInfo: !isShow.generalInfo })} />
                 </div>
             </div>
             <div data-div="info" className={`grid grid-cols-2 gap-8 transition-all duration-500 overflow-hidden ${isShow.generalInfo ? "max-h-96 px-8" : "max-h-0 px-8"}`}>
-                <input type='text' required placeholder='Name' name='categoryName' className='border p-3 rounded' />
-                <select name="superCategory" required className="border py-2 pl-4 pr-10 rounded">
+                <input type='text' required placeholder='Name' name='name' className='border p-3 rounded' />
+                <select required className="border py-2 pl-4 pr-10 rounded">
                     <option value={"Fashion"}>Fashion</option>
                     <option value={"Electronics"}>Electronics</option>
                 </select>
-                <input type='text' required placeholder='Description' name='categoryDescription' className='border p-3 rounded' />
-                <select required name='status' className="border py-2 pl-4 pr-10 rounded">
-                    <option value={"Active"}>Active</option>
-                    <option value={"Active"}>InActive</option>
+                <input type='text' required placeholder='Description' name='description' className='border p-3 rounded' />
+                <select required name='isActive' className="border py-2 pl-4 pr-10 rounded">
+                    <option value={"true"}>Active</option>
+                    <option value={"false"}>InActive</option>
                 </select>
             </div>
         </div>

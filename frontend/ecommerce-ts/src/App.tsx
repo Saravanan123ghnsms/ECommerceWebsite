@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router";
-import Login from "./pages/Login";
+import CategoryMainPage from "./components/category/create/CategoryMainPage";
+import CategoryList from "./components/category/list/CategoryList";
 import Admin from "./pages/Admin";
 import DashBoard from "./pages/DashBoard";
-import CreateCategory from "./components/category/create/CreateCategory";
-import CategoryMainPage from "./components/category/create/CategoryMainPage";
+import Login from "./pages/Login";
+import ViewCategory from "./components/category/view/ViewCategory";
 
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
         <Route path="/admin" element={<Admin />}>
           <Route path="dashboard" element={<DashBoard />} />
           <Route path="category-create" element={<CategoryMainPage />} />
+          <Route path="category-list" element={<CategoryList />} />
+          <Route path="category-view/:id" element={<ViewCategory />} />
         </Route>
       </Routes>
     </div>

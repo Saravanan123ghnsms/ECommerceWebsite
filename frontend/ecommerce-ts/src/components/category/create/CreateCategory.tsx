@@ -29,7 +29,6 @@ const CreateCategory = () => {
             </div>
             <CategoryFooter />
         </form>
-
     )
 }
 

@@ -20,7 +20,7 @@ const CategoryImageInfo = () => {
                     <div data-div="desc">To upload a caegory image</div>
                 </div>
                 <div>
-                    <FaCaretRight className={`${isShow.imageInfo ? "rotate-90" : "rotate-0"} transition-all duration-300 text-3xl p-1 cursor-pointer rounded-full hover:bg-gray-100`} onClick={() => setIsShow({ ...isShow, imageInfo: !isShow.imageInfo })} />
+                    <FaCaretRight className={`${isShow.imageInfo ? "rotate-90" : "rotate-0"} transition-all duration-300 text-3xl p-1 cursor-pointer rounded-full  bg-gray-100 hover:bg-gray-200`} onClick={() => setIsShow({ ...isShow, imageInfo: !isShow.imageInfo })} />
                 </div>
             </div>
             <div data-div="info" className={`flex justify-center overflow-hidden transition-all duration-500 ${isShow.imageInfo ? "max-h-96 px-12" : "max-h-0 px-12"}`}>
@@ -36,7 +36,7 @@ const CategoryImageInfo = () => {
                     {/* <img src={categoryImage}></img> */}
                 </label>
 
-                <input id='category-image' type='file' required accept="image/*" name="categoryImage" className='absolute w-0 h-0 opacity-0' onChange={(e) => {
+                <input id='category-image' type='file' required accept="image/*" name="image" className='absolute w-0 h-0 opacity-0' onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
                         setCategoryImage(URL.createObjectURL(file))

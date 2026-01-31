@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
-import { CreateCategoryContext } from '../../../context/CreateCategoryProvider';
+import { useContext } from 'react';
 import { FaPlusSquare } from "react-icons/fa";
+import { FaSquareMinus } from "react-icons/fa6";
+import { CreateCategoryContext } from '../../../context/CreateCategoryProvider';
 import Button from '../../common/Button';
-import { IoClose } from "react-icons/io5";
 
 const CreateMetadata = () => {
     const context = useContext(CreateCategoryContext);
@@ -11,8 +11,6 @@ const CreateMetadata = () => {
     }
 
     const { metadataTitle, setMetadataTitle, initialValueCount, setInitialValueCount, metadataValues, setMetadataValues, handleAddMetaData } = context;
-
-
 
     return (
         <div>
@@ -35,7 +33,7 @@ const CreateMetadata = () => {
                         <FaPlusSquare className="text-3xl cursor-pointer text-green-600" onClick={() => setMetadataValues(pre => [...pre, ""])} />
                     </div>
                     {metadataValues.map((i, index) => (
-                        <div key={index} className="flex items-center w-full pt-2 gap-2">
+                        <div key={index} className="flex items-center w-full pt-3 gap-2">
                             <input
                                 type="text"
                                 placeholder="Add Values"
@@ -48,7 +46,7 @@ const CreateMetadata = () => {
                                 }}
                             />
 
-                            <IoClose className='text-3xl text-red-500 cursor-pointer' onClick={() => {
+                            <FaSquareMinus className='text-3xl text-red-500 cursor-pointer' onClick={() => {
                                 setMetadataValues(metadataValues.filter((_, i) => i !== index))
                             }} />
 

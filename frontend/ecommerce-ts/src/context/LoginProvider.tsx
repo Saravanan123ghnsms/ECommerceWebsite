@@ -112,7 +112,9 @@ const LoginProvider = ({ children }: loginProviderType) => {
             }
             const response = await axiosConnection.post(USER_LOGIN, newUser);
             const result = response.data;
-            console.log(result)
+            console.log(result);
+            console.log(result.authToken)
+            localStorage.setItem("token", result.authToken)
             setRegisterStatus({
                 status: "Success",
                 desc: "Login successful. Welcome back!"

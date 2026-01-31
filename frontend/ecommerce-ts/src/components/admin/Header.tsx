@@ -7,7 +7,7 @@ import { FaAlignLeft } from "react-icons/fa";
 
 const Header = () => {
     return (
-        <div className="flex bg-stone-50">
+        <div className="flex bg-stone-50 drop-shadow-md">
             <div className="p-5 flex gap-4 w-70 customBgColor text-gray-300">
                 <div className="text-3xl">{<FaOpencart />}</div>
                 <div className="text-xl">Ecommerce</div>

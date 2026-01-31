@@ -11,8 +11,10 @@ const getCategoryController = require('../controllers/Category/getCategoryContro
 const postAddCategoryController = require('../controllers/Category/postAddCategoryController');
 const  postDeleteCategoryController = require('../controllers/Category/postDeleteCategoryController');
 const postUpdateCategoryController = require('../controllers/Category/postUpdateCategoryController');
+const getAllCategoryController = require('../controllers/Category/getAllCategoryController.js');
 
 CategoryRouter.get("/getCategory",protect,getCategoryController);
+CategoryRouter.get("/getAllCategory",protect,getAllCategoryController);
 CategoryRouter.post("/addCategory",protect,upload.single("image"),uploadImageBufferToCloudinary,postAddCategoryController);
 CategoryRouter.post("/deleteCategory",protect,postDeleteCategoryController);
 CategoryRouter.post("/updateCategory",protect,postUpdateCategoryController);

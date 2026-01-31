@@ -63,6 +63,26 @@ class CategoryService {
         }
 
     }
+    
+    async getAllategory(){
+
+        try{
+
+            const allCategory = await Category.find().populate(["masterCategory","metadata"]);
+            if(!allCategory){
+               throw new AppError(400,"No Category Found in DB.");
+            }
+            return allCategory;
+
+        }
+        catch(e){
+            logging.error(e,"An Error Occured while getAllCategory in the Category Service");
+            throw e;
+     
+        }
+
+    }
+
 
 
     async updateCategory(payload, CategoryId) {

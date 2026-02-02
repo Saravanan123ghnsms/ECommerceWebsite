@@ -11,8 +11,8 @@ async function getAllProductsByCategoryController(req,res,next){
             return next(errObj);
          }
          const productService = new ProductService();
-         const category = req.body.category;
-         const result= await productService.getProductsByCategory(category);
+         const categoryId = req.body.categoryId;
+         const result= await productService.getProductsByCategory(categoryId);
          return res.status(201).json({ products : result});
       }
       catch(e){

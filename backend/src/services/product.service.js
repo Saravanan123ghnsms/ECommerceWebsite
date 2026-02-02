@@ -1,6 +1,7 @@
 const Category = require('../models/Category');
 const Product = require('../models/Product');
 const AppError = require('../utils/AppError');
+const ProductHelper = require('../helpers/productHelper')
 const logger = require('../utils/logger');
 
 
@@ -19,14 +20,14 @@ class ProductService {
 
   }
 
-  async getProductsByCategory(category) {
+  async getProductsByCategory(categoryId) {
     logger.info('Reacted getProductByCategory function');
     try {
-      const categoryName = await Category.findOne({ name: category });
-      if (!categoryName) {
+      const category = await Category.findById(categoryId).populate(["masterCategory,updatedBy,createdBy"]);
+      if (!category) {
         throw new Error(`Category ${category} is not found!!!`);
       }
-      return await Product.find({ category: categoryName._id }).populate('category');
+      return await Product.find({ category: category._id }).populate('category');
     }
     catch (e) {
       logger.error("An Error Occured while fetching getProductsByCategory  from Product Service", e);
@@ -35,39 +36,42 @@ class ProductService {
   }
 
   async addProduct(payload) {
-    logger.info('Reached addproduct function');
+    
     try {
-      const { categoryName, productName, productDescription, price,
-        stock, productImageUrl
+      const { name,description,originalPrice,discount,stock,imageUrl,category,user
       } = payload;
 
-      if (!categoryName) {
-        throw new AppError(400, 'Required categoryName to add the product!!!');
-      }
-
-
-      let category = await Category.findOne({ name: categoryName });
-
-
       if (!category) {
-        category = await new Category({ name: categoryName }).save();
+        throw new AppError(400, 'Required CategoryId to add the product!!!');
       }
+
+      let actualCategory = await Category.findById(category).populate(["masterCategory","createdBy","updatedBy"]);
+
+
+      // We need to calculate the discount of the price
+
+      const productHelper = new ProductHelper();
+      
+       let parsedOriginalPrice = Number.parseInt(originalPrice);
+       let parsedFinalPrice = Number.parseInt(discount)
+       let finalPrice = productHelper.calculateDiscount(parsedOriginalPrice,parsedFinalPrice);
+      
+     
 
       const product = new Product({
-        name: productName,
-        description: productDescription,
-        price: price,
-        stock: stock,
-        imageUrl: productImageUrl,
-        category: category._id
+        name: name,
+        description: description,
+        originalPrice : originalPrice,
+        finalPrice : finalPrice,
+        discount : discount,
+        stock : stock,
+        imageUrl : imageUrl,
+        category : actualCategory._id,
+        createdBy : user,
+        updatedBy : user
       })
       const createdProduct = await product.save();
-      const result = {
-        category,
-        createdProduct
-      }
-
-      return result;
+      return createdProduct;
 
     }
     catch (e) {
@@ -107,7 +111,7 @@ class ProductService {
   }
 
   async updateProduct(payload, productId) {
-    logger.info('Reached the UpdateProduct function in the Product Service.');
+    
     try {
       const updatedPayload = {};
 
@@ -116,6 +120,8 @@ class ProductService {
           updatedPayload[key] = payload[key];
         }
       }
+
+      delete updatedPayload['createdBy'];
 
       const updatedProduct = await Product.findByIdAndUpdate(productId, updatedPayload, { new: true, runValidators: true });
       return updatedProduct;

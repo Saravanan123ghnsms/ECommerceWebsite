@@ -6,7 +6,7 @@ const CategoryService = require("../../services/category.service");
 async function getCategoryController(req,res,next){
      try{
            const CategoryServiceObj = new CategoryService();
-           const CategoryId = req.body.CategoryId;
+           const CategoryId = req.query.CategoryId;
            if(!CategoryId){
                 throw new AppError(500,"CategoryID is required!!!");
            }

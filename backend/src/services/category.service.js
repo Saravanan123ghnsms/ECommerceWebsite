@@ -1,4 +1,5 @@
-const Category = require("../models/Category")
+const Category = require("../models/Category");
+const CategoryMetadata = require("../models/CategoryMetadata");
 const CategoryMetadataService = require('../services/categorymetadata');
 const AppError = require("../utils/AppError")
 const logger = require("../utils/logger")
@@ -12,7 +13,7 @@ class CategoryService {
             const { name, description ,imageUrl, isActive , masterCategory,metadata,user } = payload;
             // Meta data is a array of object
             
-            let Updatedmetadata = JSON.parse(metadata);
+            
 
             let CategoryObject = {
                 name : name,
@@ -25,6 +26,7 @@ class CategoryService {
             }
             
             if(metadata){
+                let Updatedmetadata = JSON.parse(metadata);
                 const  categoryMetadataService = new CategoryMetadataService();
                 const metadataResult = await categoryMetadataService.addMetadata(Updatedmetadata);
                 CategoryObject["metadata"] = metadataResult;
@@ -95,7 +97,46 @@ class CategoryService {
               updatedPayload[key] = payload[key];
             }
           }
-    
+
+          let metadatas = [];
+
+          // Updating metatada here
+          if(updatedPayload["metadata"]){
+              let updatedMetada = JSON.parse(updatedPayload["metadata"]);
+               // updated meta is a array of object
+               for(let index = 0;index < updatedMetada.length; index++){
+                    let metadata = updatedMetada[index];
+                    id = metadata["id"];
+                    if(!id){
+                      // Id is not present means We will be getting new metadata from the payload
+                      // we will be addin this intot he db and appending it the array
+
+                      const newCategoryMetadata = new CategoryMetadata({
+                           title : metadata["title"],
+                           values : metadata["values"]
+                      })
+                      const createdMetadata = await newCategoryMetadata.save();
+                      metadatas.append(createdMetadata);
+                      continue;
+                    }
+                    metadataUpdatePayload = {
+                        "title" : metadata.title,
+                        "values" : metadata.values
+                    }
+                   let updatedMetadata = await Category.findByIdAndUpdate(
+                         id,
+                         metadataUpdatePayload,
+                         {
+                          new : true, // return updated document from the DB
+                          runValidators : true 
+                         }
+
+                    )
+                    metadatas.append(updatedMetadata);
+               }
+          }
+
+          updatedPayload["metadata"] = metadatas
           const updatedCategory = await Category.findByIdAndUpdate(CategoryId, updatedPayload, { new: true, runValidators: true }).populate(["masterCategory","metadata"]);
           return updatedCategory;
     

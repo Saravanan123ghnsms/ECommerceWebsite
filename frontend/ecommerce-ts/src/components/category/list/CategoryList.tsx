@@ -91,7 +91,7 @@ const CategoryList = () => {
                                         <div className="flex justify-start gap-8 text-2xl">
                                             {/* <LuView className="cursor-pointer" /> */}
                                             <HiOutlineViewfinderCircle className='cursor-pointer bg-gray-200 text-gray-700' onClick={() => navigate(`/admin/category-view/${item._id}`)} />
-                                            <MdEditSquare className="cursor-pointer bg-gray-200 text-blue-400" />
+                                            <MdEditSquare className="cursor-pointer bg-gray-200 text-blue-400" onClick={() => navigate(`/admin/category-edit/${item._id}`)} />
                                             <RiDeleteBin7Fill className="cursor-pointer  bg-gray-200 text-red-400" />
                                         </div>
                                     </div>

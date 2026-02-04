@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaPlusSquare } from "react-icons/fa";
 import { CreateCategoryContext } from '../../../context/CreateCategoryProvider';
 import Button from '../../common/Button';
@@ -9,37 +9,42 @@ const EditMetadata = () => {
         throw new Error("Create Category Context is missing...");
     }
 
-    const { metadata, setMetaData, setMetadataAction, editMetadataIndex } = context;
+    const { metadata, setMetaData, setMetadataAction, editMetadataName, category, setCategory } = context;
 
     const handleEditMetaData = (
     ) => {
         // e.preventDefault();
 
         const newMetaData = {
-            id: editMetadataIndex,
+            // id: editMetadataIndex,
             title: editMetaDataTitle || "",
             values: editMetadataValues || []
         }
 
-        const metadataedit = metadata.map(item => item.id === editMetadataIndex ? newMetaData : item)
+        const metadataedit = category.metadata.map(item => item.title === editMetadataName ? newMetaData : item)
 
-        setMetaData(metadataedit);
+        setCategory({ ...category, metadata: metadataedit });
+
         setMetadataAction("List");
         // setMetadataTitle("");
     }
 
+    const [editMetaDataTitle, setEditMetadataTitle] = useState<string | undefined>("");
+    const [editMetadataValues, seteditMetadataValues] = useState<string[]>([]);
+    const [currentMetadataValueCount, setCurrentMetadataValueCount] = useState(0);
 
-    const [editMetaDataTitle, setEditMetadataTitle] = useState(metadata.find(val => val.id === editMetadataIndex)?.title);
+    useEffect(() => {
+        const meta = category.metadata.find(
+            val => val.title === editMetadataName
+        );
 
-    const [editMetadataValues, seteditMetadataValues] = useState(metadata.find(val => val.id === editMetadataIndex)?.values)
+        const values = meta?.values ?? [];
 
+        setEditMetadataTitle(meta?.title ?? "");
+        seteditMetadataValues(values);
+        setCurrentMetadataValueCount(values.length);
+    }, [category, editMetadataName]);
 
-    const currentMetadataValues = editMetadataValues || [];
-    const currentMetadataTitle = editMetaDataTitle || "";
-
-    const [currentMetadataValueCount, setCurrentMetadataValueCount] = useState(currentMetadataValues.length);
-
-    // setMetadataTitle("");
 
 
     return (
@@ -52,7 +57,7 @@ const EditMetadata = () => {
                         type="text"
                         placeholder="Add Title"
                         className="border w-full p-2"
-                        value={currentMetadataTitle}
+                        value={editMetaDataTitle}
                         onChange={(e) => setEditMetadataTitle(e.target.value)}
                     />
                 </div>
@@ -68,9 +73,9 @@ const EditMetadata = () => {
                                 type="text"
                                 placeholder="Add Values"
                                 className="border w-full p-2 flex"
-                                value={currentMetadataValues?.[i]}
+                                value={editMetadataValues?.[i]}
                                 onChange={(e) => {
-                                    const updateList = [...currentMetadataValues];
+                                    const updateList = [...editMetadataValues || []];
                                     updateList[index] = e.target.value;
                                     seteditMetadataValues(updateList);
                                 }}

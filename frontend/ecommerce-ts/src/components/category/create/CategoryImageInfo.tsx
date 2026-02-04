@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaCaretRight } from "react-icons/fa6";
 import { ImUpload } from "react-icons/im";
 import { CreateCategoryContext } from "../../../context/CreateCategoryProvider";
@@ -11,7 +11,12 @@ const CategoryImageInfo = () => {
         throw new Error("Create Category Context is missing...");
     }
 
-    const { isShow, setIsShow } = context;
+    const { isShow, setIsShow, category } = context;
+
+    useEffect(() => {
+        setCategoryImage(category.imageUrl);
+    }, [category])
+
     return (
         <div data-div="general-info" className='bg-white rounded-xl'>
             <div className='flex justify-between items-center p-6'>

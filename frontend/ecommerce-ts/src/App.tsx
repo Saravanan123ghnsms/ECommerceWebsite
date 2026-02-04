@@ -16,6 +16,7 @@ function App() {
           <Route path="category-create" element={<CategoryMainPage />} />
           <Route path="category-list" element={<CategoryList />} />
           <Route path="category-view/:id" element={<ViewCategory />} />
+          <Route path="category-edit/:id" element={<CategoryMainPage />} />
         </Route>
       </Routes>
     </div>

@@ -64,10 +64,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
                     isClicked: false
                 },
                 {
-                    name: "Edit",
-                    isClicked: false
-                },
-                {
                     name: "Create",
                     isClicked: false
                 }
@@ -83,10 +79,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
             operations: [
                 {
                     name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Edit",
                     isClicked: false
                 },
                 {
@@ -108,10 +100,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
                     isClicked: false
                 },
                 {
-                    name: "Edit",
-                    isClicked: false
-                },
-                {
                     name: "Create",
                     isClicked: false
                 }
@@ -127,10 +115,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
             operations: [
                 {
                     name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Edit",
                     isClicked: false
                 },
                 {
@@ -152,10 +136,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
                     isClicked: false
                 },
                 {
-                    name: "Edit",
-                    isClicked: false
-                },
-                {
                     name: "Create",
                     isClicked: false
                 }
@@ -174,10 +154,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
                     isClicked: false
                 },
                 {
-                    name: "Edit",
-                    isClicked: false
-                },
-                {
                     name: "Create",
                     isClicked: false
                 }
@@ -193,54 +169,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
             operations: [
                 {
                     name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Edit",
-                    isClicked: false
-                },
-                {
-                    name: "Create",
-                    isClicked: false
-                }
-            ],
-        },
-         {
-            id: 8,
-            name: "Roles",
-            logo: MdInventory2,
-            category: "Users",
-            isEnabled: true,
-            isClicked: false,
-            operations: [
-                {
-                    name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Edit",
-                    isClicked: false
-                },
-                {
-                    name: "Create",
-                    isClicked: false
-                }
-            ],
-        },
-         {
-            id: 8,
-            name: "Roles",
-            logo: MdInventory2,
-            category: "Users",
-            isEnabled: true,
-            isClicked: false,
-            operations: [
-                {
-                    name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Edit",
                     isClicked: false
                 },
                 {

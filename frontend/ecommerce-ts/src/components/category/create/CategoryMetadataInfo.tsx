@@ -17,8 +17,6 @@ const CategoryMetadataInfo = () => {
 
     const { isShow, setIsShow, metadata, metadataAction, setMetadataAction, categoryMetadataNotification, setCategoryMetadataNotification } = context;
 
-
-
     return (
         <div data-div="general-info" className='bg-white rounded-xl'>
 

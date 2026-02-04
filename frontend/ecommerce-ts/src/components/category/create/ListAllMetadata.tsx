@@ -10,7 +10,7 @@ const ListAllMetadata = () => {
         throw new Error("Create Category Context is missing...");
     }
 
-    const { metadata, setEditMetadataIndex, setMetadataAction } = context;
+    const { metadata, setEditMetadataName, setMetadataAction, category } = context;
 
     return (
         <div className='text-center p-2'>
@@ -23,9 +23,9 @@ const ListAllMetadata = () => {
                 <div className="text-center">Actions</div>
             </div>
             {
-                metadata.length ?
+                category.metadata.length ?
                     <div className="flex flex-col mt-0">
-                        {metadata.map((data, index) => (
+                        {category.metadata.map((data, index) => (
                             <div
                                 key={index}
                                 className="grid grid-cols-[50px_250px_1fr_200px] gap-20 bg-white p-4 mt-4 rounded-lg items-center shadow-sm"
@@ -47,7 +47,7 @@ const ListAllMetadata = () => {
                                 <div className="flex justify-center gap-7 text-2xl">
                                     {/* <LuView className="cursor-pointer" /> */}
                                     <MdEditSquare className="cursor-pointer" onClick={() => {
-                                        setEditMetadataIndex(index + 1);
+                                        setEditMetadataName(data.title);
                                         setMetadataAction("Edit");
                                         // console.log(index + 1)
                                     }} />

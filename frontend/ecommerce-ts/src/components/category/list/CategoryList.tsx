@@ -5,6 +5,7 @@ import { MdEditSquare } from "react-icons/md";
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import { HiOutlineViewfinderCircle } from "react-icons/hi2";
 import { useNavigate } from 'react-router';
+import Popup from '../../common/Popup';
 
 
 const CategoryList = () => {
@@ -61,13 +62,13 @@ const CategoryList = () => {
 
 
     return (
-        <div className='flex flex-col gap-4 px-8 py-4 w-full min-h-full bg-stone-100'>
-            <div className='flex grow flex-col gap-5'>
-                <div className='flex justify-end'>
+        <div className='relative flex flex-col gap-4 px-8 w-full max-h-screen bg-stone-100 overflow-hidden'>
+            <div className='relative flex grow flex-col'>
+                <div className='flex  bg-stone-100 justify-end sticky top-0 right-0 p-5 z-10'>
                     <Button title='Add Category' type='list-create-category' onClick={() => navigate("/admin/category-create")} />
                 </div>
-                <div className='flex flex-col grow bg-white rounded-md'>
-                    <div className='font-semibold p-5 w-full grid gap-2 grid-cols-[100px_300px_1fr_1fr_1fr_1fr] rounded-tr-md rounded-tl-md bg-gray-300 overflow-hidden'>
+                <div className='relative flex flex-col grow bg-white rounded-md'>
+                    <div className='font-semibold p-5 w-full grid gap-2 grid-cols-[100px_300px_1fr_1fr_1fr_1fr] rounded-tr-md rounded-tl-md bg-gray-300 overflow-hidden sticky top-21 right-0 z-10'>
                         <div><input type='checkbox' className='scale-150' /></div>
                         <div>Title</div>
                         <div>Status</div>
@@ -100,6 +101,9 @@ const CategoryList = () => {
                         }
                     </div>
                 </div>
+            </div>
+            <div className='absolute z-20 top-1/2'>
+                <Popup />
             </div>
         </div>
     )

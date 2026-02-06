@@ -24,13 +24,13 @@ const CategoryGeneralInfo = () => {
                 </div>
             </div>
             <div data-div="info" className={`grid grid-cols-2 gap-8 transition-all duration-500 overflow-hidden ${isShow.generalInfo ? "max-h-96 px-8" : "max-h-0 px-8"}`}>
-                <input type='text' required placeholder='Name' name='name' className='border p-3 rounded'
+                <input type='text'  placeholder='Name' name='name' className='border p-3 rounded'
                     value={category.name} onChange={(e) => setCategory({ ...category, name: e.target.value })} />
                 <select required className="border py-2 pl-4 pr-10 rounded" value={`${category.masterCategory.name}`} onChange={(e) => setCategory({ ...category, masterCategory: { ...category.masterCategory, name: e.target.value } })} >
                     <option value={"Fashion"}>Fashion</option>
                     <option value={"Electronics"}>Electronics</option>
                 </select>
-                <input type='text' required placeholder='Description' name='description' className='border p-3 rounded' value={category.description} onChange={(e) => setCategory({ ...category, description: e.target.value })} />
+                <input type='text'  placeholder='Description' name='description' className='border p-3 rounded' value={category.description} onChange={(e) => setCategory({ ...category, description: e.target.value })} />
                 <select required name='isActive' className="border py-2 pl-4 pr-10 rounded" value={`${category.masterCategory.isActive}`} onChange={(e) => setCategory({ ...category, isActive: e.target.value === "Active" ? true : false })}>
                     <option value={"true"}>Active</option>
                     <option value={"false"}>InActive</option>

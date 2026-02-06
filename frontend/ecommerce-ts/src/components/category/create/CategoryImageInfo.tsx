@@ -11,7 +11,7 @@ const CategoryImageInfo = () => {
         throw new Error("Create Category Context is missing...");
     }
 
-    const { isShow, setIsShow, category } = context;
+    const { isShow, setIsShow, category, isEditCategory } = context;
 
     useEffect(() => {
         setCategoryImage(category.imageUrl);
@@ -41,12 +41,13 @@ const CategoryImageInfo = () => {
                     {/* <img src={categoryImage}></img> */}
                 </label>
 
-                <input id='category-image' type='file' required accept="image/*" name="image" className='absolute w-0 h-0 opacity-0' onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                        setCategoryImage(URL.createObjectURL(file))
-                    }
-                }} />
+                <input required={!isEditCategory}   // ✅ key line
+                    id='category-image' type='file' accept="image/*" name="image" className='absolute w-0 h-0 opacity-0' onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                            setCategoryImage(URL.createObjectURL(file))
+                        }
+                    }} />
             </div>
         </div >
     )

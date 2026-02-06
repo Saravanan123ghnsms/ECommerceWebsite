@@ -105,6 +105,7 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
     const navigate = useNavigate()
 
     const CREATE_CATEGORY_URL = "/api/category/addCategory";
+    const UPDATE_CATEGORY_URL = "/api/category/updateCategory";
 
     const [isEditCategory, setIsEditCategory] = useState(false);
 
@@ -174,6 +175,12 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             return { id: item._id, title: item.title, values: item.values }
         })
         formData.append("metadata", JSON.stringify(modifiedMetadata));
+        const image = formData.get("image") as File | null;
+
+        if (!image || image.size === 0) {
+            formData.delete("image");
+        }
+
         console.log(Object.fromEntries(formData))
 
         const token = localStorage.getItem("token");
@@ -181,7 +188,8 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             console.log("Bearer Token is missing...")
         }
         try {
-            const result = await axiosConnection.post(CREATE_CATEGORY_URL, formData, {
+            const mainURL = isEditCategory ? UPDATE_CATEGORY_URL : CREATE_CATEGORY_URL
+            const result = await axiosConnection.post(mainURL, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": "Bearer " + token

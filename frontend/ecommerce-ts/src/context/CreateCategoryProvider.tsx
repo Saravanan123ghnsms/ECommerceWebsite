@@ -69,7 +69,9 @@ type initialCreateCategoryContext = {
     isEditCategory: boolean,
     setIsEditCategory: React.Dispatch<React.SetStateAction<boolean>>,
     category: categoryType,
-    setCategory: React.Dispatch<React.SetStateAction<categoryType>>
+    setCategory: React.Dispatch<React.SetStateAction<categoryType>>,
+    // isDeleteNotification: boolean,
+    // setIsDeleteNotification: React.Dispatch<React.SetStateAction<boolean>>
 
 
     //     editMetaDataTitle: string | undefined,
@@ -124,6 +126,8 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
     const [editMetadataName, setEditMetadataName] = useState("");
 
     const [metadataAction, setMetadataAction] = useState<metadataActionType>("List");
+
+   
 
 
     const [isShow, setIsShow] = useState<isShowType>({
@@ -231,7 +235,8 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             categoryMetadataNotification,
             setCategoryMetadataNotification,
             category,
-            setCategory
+            setCategory,
+           
             // editMetaDataTitle,
             // setEditMetadataTitle,
             // editMetadataValues,

@@ -1,8 +1,11 @@
 const express = require('express');
 const Productrouter = express.Router();
+const {protect} = require('../middleware/auth.middleware');
+const upload = require('../middleware/fileupload.middleware.js');
+const  uploadImageBufferToCloudinary =require('../middleware/cloudinary.uploads.js');
 
 const getAllProductsByCategoryController = require('../controllers/Products/getProductsByCategoryController');
-const getAllProducts = require('../controllers/Products/getProductController');
+const getAllProductsController = require('../controllers/Products/getAllProductsController');
 const postAddProductController = require('../controllers/Products/postAddProductController');
 const getProductController = require('../controllers/Products/getProductController');
 const deleteProductController = require('../controllers/Products/postDeleteProductController');
@@ -11,12 +14,12 @@ const updateProductController = require('../controllers/Products/postUpdateProdu
  
 
 // POST /api/register
-Productrouter.get('/getAllProducts',getAllProducts);
-Productrouter.get('/getProductsByCategory',getAllProductsByCategoryController );
-Productrouter.post('/addProduct',postAddProductController);
-Productrouter.get('/getProductByID',getProductController);
-Productrouter.delete('/deleteProductByID',deleteProductController);
-Productrouter.patch('/updateProductByID',updateProductController);
+Productrouter.get('/getAllProducts',protect,getAllProductsController);
+Productrouter.get('/getProductsByCategory',protect,getAllProductsByCategoryController );
+Productrouter.post('/addProduct',protect,upload.single("image"),uploadImageBufferToCloudinary,postAddProductController);
+Productrouter.get('/getProductByID',protect,getProductController);
+Productrouter.delete('/deleteProductByID',protect,deleteProductController);
+Productrouter.patch('/updateProductByID',protect,upload.single("image"),uploadImageBufferToCloudinary,updateProductController);
 
 
 

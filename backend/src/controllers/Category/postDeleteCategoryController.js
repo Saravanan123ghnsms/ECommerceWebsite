@@ -4,7 +4,7 @@ const logger = require('../../utils/logger');
 
 async function deleteCategoryController(req,res,next){
       try{
-         if(!req.query?.productId){
+         if(!req.query?.CategoryId){
              const errorObj = new AppError(400,'Missing ProductId!!!');
              return next(errorObj);
          }

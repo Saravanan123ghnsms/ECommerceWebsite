@@ -5,6 +5,8 @@ require('dotenv').config();
 
 
 async function uploadImageBufferToCloudinary(req,res,next){
+
+   if(req.file){
    try{
     logger.info("reached the clodudinary function")
     // Instatiating the cloudinary config.
@@ -18,7 +20,7 @@ async function uploadImageBufferToCloudinary(req,res,next){
                     folder : "uploads",  // Giving the folder name for cloudinary service.
                     resource_type : "image",
                     overwrite : true,
-                    public_id : `category_${req.body.name}`,
+                    public_id : `category_${req.file.originalname}`,
                 },
                 (error,result) => {
                     if(error){
@@ -48,6 +50,10 @@ async function uploadImageBufferToCloudinary(req,res,next){
         logger.error(e,"An Error Occured while uploading the file to the Cloudinary.");
         next(e);
    }
+}
+else{
+    next();
+}
 }
 
 

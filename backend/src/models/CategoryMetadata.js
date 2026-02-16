@@ -1,6 +1,7 @@
 const { timeStamp } = require("console");
 const mongoose = require("mongoose");
 const { ref } = require("process");
+const Category = require("./Category");
 const {Schema} = mongoose;
 
 const CategoryMetadataSchema = new Schema({
@@ -14,6 +15,16 @@ const CategoryMetadataSchema = new Schema({
     }
 
 }, { timestamps: true });
+
+// Applying the cascading of the category metadata
+CategoryMetadataSchema.post(
+    "deleteOne",{document : true,query:false},async function deleteRelatedCategory(doc){
+         const categoryMetadataId = doc._id;
+
+         await Category.deleteMany({metadata : categoryMetadataId});
+         console.log("Successfully Deleted the Related Category  in the CategoryMetedata.")
+    }
+)
 
 module.exports = mongoose.model("CategoryMetadata", CategoryMetadataSchema)
 

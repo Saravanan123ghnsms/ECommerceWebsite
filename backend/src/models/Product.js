@@ -7,13 +7,22 @@ const {Schema} = mongoose;
 const ProductSchema = new Schema({
     name : {
         type : String,
-        required : true
+        required : true,
+        unique : true
     },
     description : {
         type : String,
         required : true
     } ,
-    price :{
+    originalPrice :{
+        type : Number,
+        required : true,
+    },
+    finalPrice :{
+        type : Number,
+        required : true,
+    },
+    discount :{
         type : Number,
         required : true,
     },
@@ -24,12 +33,21 @@ const ProductSchema = new Schema({
     },
     imageUrl : {
         type : String,
-        default : "",
         required : true
     },
     category :{
         type : Schema.Types.ObjectId,
         ref:"Category",
+        required : true
+    },
+    updatedBy : {
+        type : Schema.Types.ObjectId,
+        ref : "users",
+        required : true
+    },
+    createdBy : {
+        type : Schema.Types.ObjectId,
+        ref : "users",
         required : true
     }
 },{timestamps : true});

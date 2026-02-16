@@ -52,6 +52,19 @@ class MasterCategoryService {
 
     }
 
+    async getAllMasterCategory(){
+         try{
+
+          const allMasterCategory = await MasterCategory.find().populate(["createdBy","updatedBy"]);
+          return allMasterCategory;
+
+         }
+         catch(e){
+            logger.error(e,"An Error occured while getting all master category in mastercateogry service.");
+            throw e;
+         }
+    }
+
 
     async updateMasterCategory(payload, masterCategoryId) {
         
@@ -63,7 +76,9 @@ class MasterCategoryService {
               updatedPayload[key] = payload[key];
             }
           }
-    
+          // Deleting the created by payload from the Request if it is.
+          delete updatedPayload["createdBy"];
+
           const updatedMasterCategory = await MasterCategory.findByIdAndUpdate(masterCategoryId, updatedPayload, { new: true, runValidators: true });
           return updatedMasterCategory;
     

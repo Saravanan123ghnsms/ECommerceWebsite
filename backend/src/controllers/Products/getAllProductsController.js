@@ -5,6 +5,11 @@ async function getAllProductsController(req,res,next){
       try{
          const productService = new ProductService();
          const result= await productService.getAllProduct();
+         if(!result){
+             return res.status(400).json({
+                message :"No Product found!!!"
+             })
+         }
          return res.status(201).json({ products : result});
       }
       catch(e){

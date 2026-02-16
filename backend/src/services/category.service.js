@@ -106,7 +106,7 @@ class CategoryService {
                // updated meta is a array of object
                for(let index = 0;index < updatedMetada.length; index++){
                     let metadata = updatedMetada[index];
-                    id = metadata["id"];
+                    let id = metadata["id"];
                     if(!id){
                       // Id is not present means We will be getting new metadata from the payload
                       // we will be addin this intot he db and appending it the array
@@ -116,7 +116,7 @@ class CategoryService {
                            values : metadata["values"]
                       })
                       const createdMetadata = await newCategoryMetadata.save();
-                      metadatas.append(createdMetadata);
+                      metadatas.push(createdMetadata);
                       continue;
                     }
                     metadataUpdatePayload = {

@@ -6,13 +6,13 @@ async function getAllProductsByCategoryController(req,res,next){
      
       try{
          
-         if(!req.body?.category){
+         if(!req.query?.categoryId){
             const errObj = new AppError(400,'Missing Category Field!!!');
             return next(errObj);
          }
          const productService = new ProductService();
-         const category = req.body.category;
-         const result= await productService.getProductsByCategory(category);
+         const categoryId = req.query.categoryId;
+         const result= await productService.getProductsByCategory(categoryId);
          return res.status(201).json({ products : result});
       }
       catch(e){

@@ -27,9 +27,10 @@ const ProductSchema = new Schema({
         required : true,
     },
     stock : {
-        type : Number,
-        default : 0,
+        type : Schema.Types.ObjectId,
+        ref : "Inventory",
         required : true
+        
     },
     imageUrl : {
         type : String,

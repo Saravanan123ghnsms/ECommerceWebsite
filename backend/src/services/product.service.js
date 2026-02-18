@@ -1,5 +1,6 @@
 const Category = require('../models/Category');
 const Product = require('../models/Product');
+const Inventory = require('../models/invertory')
 const AppError = require('../utils/AppError');
 const ProductHelper = require('../helpers/productHelper')
 const logger = require('../utils/logger');
@@ -21,7 +22,8 @@ class ProductService {
       { path: "createdBy" },
       { path: "updatedBy" }
     ]
-  }
+  },
+  {path : "stock"}
 ]);
     }
     catch (e) {
@@ -58,9 +60,13 @@ class ProductService {
 
       let actualCategory = await Category.findById(category).populate(["masterCategory","createdBy","updatedBy"]);
 
-
+      let inventoryObj = new Inventory({
+           totalStock : stock,
+           currentStock : stock,
+           itemSold : 0
+      })
+      let createdInventory = await inventoryObj.save();
       // We need to calculate the discount of the price
-
       const productHelper = new ProductHelper();
       
        let parsedOriginalPrice = Number.parseInt(originalPrice);
@@ -75,7 +81,7 @@ class ProductService {
         originalPrice : originalPrice,
         finalPrice : finalPrice,
         discount : discount,
-        stock : stock,
+        stock : createdInventory._id,
         imageUrl : imageUrl,
         category : actualCategory._id,
         createdBy : user,

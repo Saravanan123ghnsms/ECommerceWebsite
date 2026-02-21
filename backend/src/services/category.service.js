@@ -119,7 +119,7 @@ class CategoryService {
                       metadatas.push(createdMetadata);
                       continue;
                     }
-                    metadataUpdatePayload = {
+                   let metadataUpdatePayload = {
                         "title" : metadata.title,
                         "values" : metadata.values
                     }

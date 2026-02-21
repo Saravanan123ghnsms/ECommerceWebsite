@@ -132,7 +132,7 @@ class CategoryService {
                          }
 
                     )
-                    metadatas.append(updatedMetadata);
+                    metadatas.push(updatedMetadata);
                }
           }
 

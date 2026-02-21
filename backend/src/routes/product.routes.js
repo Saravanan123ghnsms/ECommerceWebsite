@@ -18,8 +18,8 @@ Productrouter.get('/getAllProducts',protect,getAllProductsController);
 Productrouter.get('/getProductsByCategory',protect,getAllProductsByCategoryController );
 Productrouter.post('/addProduct',protect,upload.single("image"),uploadImageBufferToCloudinary,postAddProductController);
 Productrouter.get('/getProductByID',protect,getProductController);
-Productrouter.delete('/deleteProductByID',protect,deleteProductController);
-Productrouter.patch('/updateProductByID',protect,upload.single("image"),uploadImageBufferToCloudinary,updateProductController);
+Productrouter.post('/deleteProductByID',protect,deleteProductController);
+Productrouter.post('/updateProductByID',protect,upload.single("image"),uploadImageBufferToCloudinary,updateProductController);
 
 
 

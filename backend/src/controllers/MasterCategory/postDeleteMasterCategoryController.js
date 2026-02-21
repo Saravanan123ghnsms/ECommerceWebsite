@@ -4,8 +4,8 @@ const logger = require('../../utils/logger');
 
 async function deleteMasterCategoryController(req,res,next){
       try{
-         if(!req.query?.productId){
-             const errorObj = new AppError(400,'Missing ProductId!!!');
+         if(!req.query?.masterCategoryId){
+             const errorObj = new AppError(400,'Missing masterCategoryId!!!');
              return next(errorObj);
          }
          const masterCategoryService = new MasterCategoryService();

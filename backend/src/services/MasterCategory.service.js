@@ -94,8 +94,8 @@ class MasterCategoryService {
 
           try {
             const masterCategory = await MasterCategory.findByIdAndDelete(masterCategoryId);
-            if (!product) {
-              throw new AppError(400, 'Product not found!!!');
+            if (!masterCategory) {
+              throw new AppError(400, 'MasterCategory not found!!!');
             }
             return masterCategory;
           }

@@ -152,8 +152,8 @@ class CategoryService {
 
           try {
             const Category = await Category.findByIdAndDelete(CategoryId);
-            if (!product) {
-              throw new AppError(400, 'Product not found!!!');
+            if (!Category) {
+              throw new AppError(400, 'Category not found!!!');
             }
             return Category;
           }

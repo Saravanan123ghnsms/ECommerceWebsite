@@ -151,11 +151,11 @@ class CategoryService {
     async deleteCategory(CategoryId) {
 
           try {
-            const Category = await Category.findByIdAndDelete(CategoryId);
-            if (!Category) {
+            const CategoryRes = await Category.findByIdAndDelete(CategoryId);
+            if (!CategoryRes) {
               throw new AppError(400, 'Category not found!!!');
             }
-            return Category;
+            return CategoryRes;
           }
           catch (e) {
             logger.error(e, 'An Error Occured in deleteCategory function in Category Service');

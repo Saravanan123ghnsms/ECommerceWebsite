@@ -100,7 +100,7 @@ class ProductService {
   async getProduct(productId) {
     logger.info({ productId }, 'Reached the getProduct function in Product Service File');
     try {
-      const product = await Product.findById(productId).populate('category');
+      const product = await Product.findById(productId).populate(['category','stock']);
       if (!product) {
         throw new AppError(400, 'Product not found!!!');
       }

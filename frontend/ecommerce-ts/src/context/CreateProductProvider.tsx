@@ -1,4 +1,4 @@
-import { createContext, use, useState, type ReactNode } from 'react';
+import { createContext, useState, type ReactNode } from 'react';
 import { axiosConnection } from '../axios/axiosConnection';
 import { useNavigate } from 'react-router';
 
@@ -7,6 +7,21 @@ import { useNavigate } from 'react-router';
 //     title: string,
 //     values: string[]
 // }
+
+type productType = {
+    _id?:string,
+    name: string,
+    description: string,
+    originalPrice: number | null,
+    finalPrice: number | null,
+    discount: number | null,
+    stock: number | null,
+    // stockResponse:
+    imageUrl: string,
+    isActive: boolean
+    category: categoryType,
+    // productCategoryName?:string
+}
 
 type categoryMetadataNotification = {
     isShow: boolean;
@@ -19,13 +34,15 @@ type metadataActionType = "Create" | "Edit" | "List";
 type isShowType = {
     generalInfo: boolean,
     imageInfo: boolean,
-    metadataInfo: boolean
+    metadataInfo: boolean,
+    priceInfo: boolean
 }
 
 type metadataType = {
     _id?: string,
     title: string,
-    values: string[]
+    values: string[],
+    selectedValue?: string
 }
 
 type masterCategoryType = {
@@ -56,10 +73,10 @@ type initialCreateCategoryContext = {
     setMetadataTitle: React.Dispatch<React.SetStateAction<string>>,
     metadataValues: string[],
     setMetadataValues: React.Dispatch<React.SetStateAction<string[]>>
-    handleAddMetaData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id?: number) => void,
+    // handleAddMetaData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id?: number) => void,
     metadataAction: metadataActionType,
     setMetadataAction: React.Dispatch<React.SetStateAction<metadataActionType>>,
-    handleCreateCategory: (e: React.FormEvent<HTMLFormElement>, id?: string) => void,
+    // handleCreateCategory: (e: React.FormEvent<HTMLFormElement>, id?: string) => void,
     isShow: isShowType,
     setIsShow: React.Dispatch<React.SetStateAction<isShowType>>,
     editMetadataName: string,
@@ -70,6 +87,21 @@ type initialCreateCategoryContext = {
     setIsEditCategory: React.Dispatch<React.SetStateAction<boolean>>,
     category: categoryType,
     setCategory: React.Dispatch<React.SetStateAction<categoryType>>,
+
+    // products 
+    categoryList: categoryType[],
+    setCategoryList: React.Dispatch<React.SetStateAction<categoryType[]>>,
+    product: productType,
+    setProduct: React.Dispatch<React.SetStateAction<productType>>,
+    isProductPreview: boolean,
+    setIsProductPreview: React.Dispatch<React.SetStateAction<boolean>>
+    productImage: any,
+    setProductImage: React.Dispatch<any>,
+    handleCreateProduct: (e: React.FormEvent<HTMLFormElement>, id: string | undefined) => Promise<void>,
+    isEditProduct: boolean,
+    setIsEditProduct: React.Dispatch<React.SetStateAction<boolean>>
+
+
     // isDeleteNotification: boolean,
     // setIsDeleteNotification: React.Dispatch<React.SetStateAction<boolean>>
 
@@ -81,7 +113,9 @@ type initialCreateCategoryContext = {
     // }
 }
 
-export const CreateCategoryContext = createContext<initialCreateCategoryContext | null>(null);
+
+
+export const CreateProductContext = createContext<initialCreateCategoryContext | null>(null);
 
 type createCategoryProviderType = {
     children: ReactNode
@@ -102,12 +136,29 @@ const defaultCategory: categoryType = {
     metadata: [],
 };
 
-const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
+const defaultProduct: productType = {
+    _id:"",
+    name: "",
+    description: "",
+    originalPrice: null,
+    finalPrice: null,
+    discount: null,
+    stock: null,
+    imageUrl: "",
+    isActive: true,
+    category: defaultCategory,
+    // productCategoryName:""
+}
+
+const CreateProductProvider = ({ children }: createCategoryProviderType) => {
 
     const navigate = useNavigate()
 
     const CREATE_CATEGORY_URL = "/api/category/addCategory";
     const UPDATE_CATEGORY_URL = "/api/category/updateCategory";
+
+    const CREATE_PRODUCT_URL = "/api/product/addProduct";
+    const UPDATE_PRODUCT_URL = "/api/product/updateProductByID";
 
     const [isEditCategory, setIsEditCategory] = useState(false);
 
@@ -127,13 +178,26 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
 
     const [metadataAction, setMetadataAction] = useState<metadataActionType>("List");
 
-   
+
+    //products 
+    const [categoryList, setCategoryList] = useState<categoryType[]>([]);
+
+    const [product, setProduct] = useState<productType>(defaultProduct);
+
+    const [isProductPreview, setIsProductPreview] = useState(false);
+
+    const [productImage, setProductImage] = useState<any>("");
+
+    const [isEditProduct, setIsEditProduct] = useState(false);
+
+
 
 
     const [isShow, setIsShow] = useState<isShowType>({
         generalInfo: false,
         imageInfo: false,
-        metadataInfo: false
+        metadataInfo: false,
+        priceInfo: false
     });
 
     const [categoryMetadataNotification, setCategoryMetadataNotification] = useState<categoryMetadataNotification>({
@@ -141,49 +205,18 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
         title: '',
         message: ''
     });
+    // Product
 
-    const handleAddMetaData = (e: React.MouseEvent<HTMLButtonElement>
-    ) => {
-        console.log(":::jsdjhdjfghb")
-        e.preventDefault();
-        const newMetaData: metadataType = {
-            // _id: metadata.length > 0 ? metadata[metadata.length - 1]._id + 1 : 1,
-            title: metadataTitle,
-            values: metadataValues
-        }
-        setCategory({ ...category, metadata: [...category.metadata, newMetaData] });
-        setCategoryMetadataNotification({
-            isShow: true,
-            title: "Success",
-            message: "Metadata Created Successfully!!!"
-        })
-        setTimeout(() => {
-            setCategoryMetadataNotification({
-                isShow: false,
-                title: "",
-                message: "!!!"
-            })
-        }, 4000)
-
-        setMetadataAction("List");
-        setMetadataTitle("");
-        setMetadataValues([""]);
-        setInitialValueCount(1);
-    }
-
-    const handleCreateCategory = async (e: React.FormEvent<HTMLFormElement>, id: string | undefined) => {
+    const handleCreateProduct = async (e: React.FormEvent<HTMLFormElement>, id: string | undefined) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        formData.append("masterCategory", "698ffd2af807aadaa13b0c10")
-        const modifiedMetadata = category.metadata.map((item) => {
-            return { id: item._id, title: item.title, values: item.values }
-        })
-        formData.append("metadata", JSON.stringify(modifiedMetadata));
         const image = formData.get("image") as File | null;
 
         if (!image || image.size === 0) {
             formData.delete("image");
         }
+
+        // formData.append("stock", "10")
 
         console.log(Object.fromEntries(formData))
 
@@ -192,18 +225,18 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             console.log("Bearer Token is missing...")
         }
         try {
-            const mainURL = isEditCategory ? UPDATE_CATEGORY_URL : CREATE_CATEGORY_URL
+            const mainURL = isEditProduct ? UPDATE_PRODUCT_URL : CREATE_PRODUCT_URL
             const result = await axiosConnection.post(mainURL, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": "Bearer " + token
                 },
                 params: {
-                    "CategoryId": id
+                    "productId": id
                 }
             })
             console.log(result);
-            navigate("/admin/category-list");
+            navigate("/admin/product-list");
 
         }
         catch (e) {
@@ -213,7 +246,7 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
     }
 
     return (
-        <CreateCategoryContext.Provider value={{
+        <CreateProductContext.Provider value={{
             isEditCategory,
             setIsEditCategory,
             metadata,
@@ -224,10 +257,8 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             setMetadataTitle,
             metadataValues,
             setMetadataValues,
-            handleAddMetaData,
             metadataAction,
             setMetadataAction,
-            handleCreateCategory,
             isShow,
             setIsShow,
             editMetadataName,
@@ -236,15 +267,30 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             setCategoryMetadataNotification,
             category,
             setCategory,
-           
+
+            //products
+            categoryList,
+            setCategoryList,
+            product,
+            setProduct,
+            isProductPreview,
+            setIsProductPreview,
+            productImage,
+            setProductImage,
+            handleCreateProduct,
+            isEditProduct,
+            setIsEditProduct
+
+
+
             // editMetaDataTitle,
             // setEditMetadataTitle,
             // editMetadataValues,
             // seteditMetadataValues
         }}>
             {children}
-        </CreateCategoryContext.Provider>
+        </CreateProductContext.Provider>
     )
 }
 
-export default CreateCategoryProvider
+export default CreateProductProvider

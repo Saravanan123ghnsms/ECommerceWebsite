@@ -22,7 +22,10 @@ const SideBar = () => {
                         {sideBarDetails.map(bar => (
                             bar.category === type &&
                             <div data-div="sideBarIcon" className="flex flex-col p-2 my-2">
-                                <div className={`flex justify-between items-center gap-6 px-8 ${bar.isClicked && "border-l-3 border-l-cyan-300"} cursor-pointer hover:text-gray-50`} onClick={() => onSideBarClick(bar.id)}>
+                                <div className={`flex justify-between items-center gap-6 px-8 ${bar.isClicked && "border-l-3 border-l-cyan-300"} cursor-pointer hover:text-gray-50`} onClick={() => {
+                                    onSideBarClick(bar.id);
+                                    bar.operations.length === 0 && navigate(bar.name.toLowerCase()) 
+                                }}>
                                     <div className="flex gap-3">
                                         <bar.logo className={`text-xl ${bar.isClicked && "text-cyan-300"}`} />
                                         <div className={`${bar.isClicked && "text-gray-50"}`}>{bar.name}</div>

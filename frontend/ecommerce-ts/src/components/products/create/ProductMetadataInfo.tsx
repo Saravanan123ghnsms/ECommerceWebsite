@@ -1,0 +1,52 @@
+
+import { useContext } from "react";
+import { FaCaretRight } from "react-icons/fa6";
+import { CreateProductContext } from "../../../context/CreateProductProvider";
+
+const ProductMetadataInfo = () => {
+
+    const context = useContext(CreateProductContext);
+    if (context === null) {
+        throw new Error("Create Category Context is missing...");
+    }
+
+    const { isShow, setIsShow, category, isEditCategory, setCategory, categoryList, product, setProduct } = context;
+
+    const selectedCategory = categoryList.find(category => category._id === product.category._id);
+
+    return (
+        <div data-div="general-info" className='bg-white rounded-xl'>
+            <div className='flex justify-between items-center p-6'>
+                <div>
+                    <div data-div="title" className='text-xl font-black'>Metadata Information</div>
+                    <div data-div="desc">To add a product metadata info</div>
+                </div>
+                <div>
+                    <FaCaretRight className={`${isShow.metadataInfo ? "rotate-90" : "rotate-0"} transition-all duration-300 text-3xl p-1 cursor-pointer rounded-full bg-gray-100 hover:bg-gray-200`} onClick={() => setIsShow({ ...isShow, metadataInfo: !isShow.metadataInfo })} />
+                </div>
+            </div>
+            <div data-div="info" className={`grid grid-cols-2 gap-8 transition-all  duration-500 overflow-hidden ${isShow.metadataInfo
+                ? "max-h-96 px-8" : "max-h-0 px-8"}`}>
+                {
+                    selectedCategory &&
+                    <>{
+                        selectedCategory.metadata.map(data => (
+                            <select className="border py-2 pl-4 pr-10 rounded" value={`${data.title}`}  >
+                                <option value="" selected disabled>{data.title}</option>
+                                {
+                                    data.values.map(value => (
+                                        <option disabled>{value}</option>
+                                    ))
+                                }
+                            </select>
+                        ))
+                    }
+                    </>
+
+                }
+            </div>
+        </div >
+    )
+}
+
+export default ProductMetadataInfo

@@ -26,7 +26,7 @@ type sideBarType = {
     isClicked: boolean
 }
 
-const sidebarCategoryType: string[] = ["General", "Users"];
+const sidebarCategoryType: string[] = ["General", "Users", "Others"];
 
 type initialAdminContext = {
     sidebarCategoryType: string[],
@@ -71,7 +71,7 @@ const AdminProvider = ({ children }: adminProvierType) => {
         },
         {
             id: 3,
-            name: "Products",
+            name: "Product",
             logo: IoIosShirt,
             category: "General",
             isEnabled: true,
@@ -125,6 +125,24 @@ const AdminProvider = ({ children }: adminProvierType) => {
         },
         {
             id: 6,
+            name: "Inventory",
+            logo: MdInventory2,
+            category: "General",
+            isEnabled: true,
+            isClicked: false,
+            operations: [
+                {
+                    name: "List",
+                    isClicked: false
+                },
+                {
+                    name: "Create",
+                    isClicked: false
+                }
+            ],
+        },
+        {
+            id: 7,
             name: "Customer",
             logo: MdInventory2,
             category: "Users",
@@ -142,7 +160,7 @@ const AdminProvider = ({ children }: adminProvierType) => {
             ],
         },
         {
-            id: 7,
+            id: 8,
             name: "User",
             logo: MdInventory2,
             category: "Users",
@@ -160,7 +178,7 @@ const AdminProvider = ({ children }: adminProvierType) => {
             ],
         },
         {
-            id: 8,
+            id: 9,
             name: "Roles",
             logo: MdInventory2,
             category: "Users",
@@ -175,6 +193,16 @@ const AdminProvider = ({ children }: adminProvierType) => {
                     name: "Create",
                     isClicked: false
                 }
+            ],
+        },
+        {
+            id: 10,
+            name: "MasterCategory",
+            logo: MdInventory2,
+            category: "Others",
+            isEnabled: true,
+            isClicked: false,
+            operations: [
             ],
         },
 

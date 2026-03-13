@@ -216,6 +216,10 @@ const CreateProductProvider = ({ children }: createCategoryProviderType) => {
             formData.delete("image");
         }
 
+        if(isEditProduct){
+            formData.delete("stock")
+        }
+
         // formData.append("stock", "10")
 
         console.log(Object.fromEntries(formData))

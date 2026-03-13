@@ -8,6 +8,10 @@ import Admin from "./pages/Admin";
 import DashBoard from "./pages/DashBoard";
 import Login from "./pages/Login";
 import MasterCategoryMainPage from "./components/master_category/MasterCategoryMainPage";
+import ViewProduct from "./components/products/view/ViewProduct";
+import Inventory from "./components/inventory/Inventory";
+import VendorList from "./components/vendor/list/VendorList";
+import CreateVendor from "./components/vendor/create/CreateVendor";
 
 function App() {
   return (
@@ -32,8 +36,18 @@ function App() {
           {/* products */}
           <Route path="product-create" element={<ProductsMainPage />} />
           <Route path="product-list" element={<ProductList />} />
-          <Route path="product-view/:id" element={<ViewCategory />} />
+          <Route path="product-view/:id" element={<ViewProduct />} />
           <Route path="product-edit/:id" element={<ProductsMainPage />} />
+
+          {/* Inventory */}
+          <Route path="inventory" element={<Inventory />} />
+
+          {/* Vendor */}
+          {/* <Route path="product-create" element={<ProductsMainPage />} /> */}
+          <Route path="vendor-list" element={<VendorList />} />
+          <Route path="vendor-create" element={<CreateVendor />} />
+          {/* <Route path="product-view/:id" element={<ViewProduct />} />
+          <Route path="product-edit/:id" element={<ProductsMainPage />} /> */}
 
         </Route>
       </Routes>

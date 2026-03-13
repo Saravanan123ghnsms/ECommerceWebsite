@@ -58,7 +58,7 @@ const CreateProduct = () => {
     const { handleCreateProduct, setCategory, setIsShow, category, categoryList, setCategoryList, isProductPreview, product, setProduct, isEditProduct, setIsEditProduct, setProductImage } = context;
 
     useEffect(() => {
-        const GET_CATEGORY_URL = "/api/product/getProductByID";
+        const GET_PRODUCT_URL = "/api/product/getProductByID";
         const token = localStorage.getItem("token");
         if (!token) {
             console.log("Bearer Token is missing...")
@@ -66,7 +66,7 @@ const CreateProduct = () => {
         }
         const getProduct = async () => {
             console.log("id=>>>" + id)
-            const result = await axiosConnection.get(GET_CATEGORY_URL, {
+            const result = await axiosConnection.get(GET_PRODUCT_URL, {
                 headers: {
                     "Authorization": "Bearer " + token,
                 },

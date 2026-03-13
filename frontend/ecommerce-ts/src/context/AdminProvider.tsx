@@ -112,22 +112,13 @@ const AdminProvider = ({ children }: adminProvierType) => {
             category: "General",
             isEnabled: true,
             isClicked: false,
-            operations: [
-                {
-                    name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Create",
-                    isClicked: false
-                }
-            ],
+            operations: [],
         },
         {
             id: 6,
-            name: "Inventory",
+            name: "Admin",
             logo: MdInventory2,
-            category: "General",
+            category: "Users",
             isEnabled: true,
             isClicked: false,
             operations: [
@@ -143,7 +134,7 @@ const AdminProvider = ({ children }: adminProvierType) => {
         },
         {
             id: 7,
-            name: "Customer",
+            name: "Vendor",
             logo: MdInventory2,
             category: "Users",
             isEnabled: true,
@@ -161,7 +152,7 @@ const AdminProvider = ({ children }: adminProvierType) => {
         },
         {
             id: 8,
-            name: "User",
+            name: "Customer",
             logo: MdInventory2,
             category: "Users",
             isEnabled: true,
@@ -179,24 +170,6 @@ const AdminProvider = ({ children }: adminProvierType) => {
         },
         {
             id: 9,
-            name: "Roles",
-            logo: MdInventory2,
-            category: "Users",
-            isEnabled: true,
-            isClicked: false,
-            operations: [
-                {
-                    name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Create",
-                    isClicked: false
-                }
-            ],
-        },
-        {
-            id: 10,
             name: "MasterCategory",
             logo: MdInventory2,
             category: "Others",

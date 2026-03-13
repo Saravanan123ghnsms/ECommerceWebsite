@@ -10,8 +10,12 @@
     background: linear-gradient(to right, rgb(1, 1, 60), rgb(6, 3, 18));
 }
 
-.customColor{
+.customColor {
     background-color: #eeeeec;
+}
+
+.inventoryLabelBgColor {
+    background: linear-gradient(to top, whitesmoke, white);
 }
 
 /* * {

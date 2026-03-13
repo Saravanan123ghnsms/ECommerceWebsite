@@ -7,7 +7,6 @@ import { axiosConnection } from '../../../axios/axiosConnection';
 import Button from '../../common/Button';
 import Popup from '../../common/Popup';
 
-
 const CategoryList = () => {
 
     const DELETE_CATEGORY_URL = "/api/category/deleteCategory";

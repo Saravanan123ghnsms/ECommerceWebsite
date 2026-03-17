@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router';
 import { axiosConnection } from '../../../axios/axiosConnection';
 import Button from '../../common/Button';
 import Popup from '../../common/Popup';
+import EditVendor from './EditVendor';
 
 
 const VendorList = () => {
 
-    const DELETE_PRODUCT_URL = "/api/product/deleteProductByID";
+    const DELETE_USER_URL = "/api/user/deleteUser";
     const GET_ALL_USER_URL = "/api/user/getAllUser?role=seller";
 
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ const VendorList = () => {
         status?: string,
         address?: string,
         role: string,
+        password?: string,
         createdAt: string,
         updatedAt: string
     }
@@ -30,6 +32,10 @@ const VendorList = () => {
     const [userList, setUserList] = useState<userType[]>([]);
 
     const [isDeleteNotification, setIsDeleteNotification] = useState(false);
+
+    const [isEditUserNotification, setIsEditUserNotification] = useState(false);
+
+    const [editUser, setEditUser] = useState<userType | null>(null);
 
     const [deleteUser, setDeleteUser] = useState<userType | null>(null);
 
@@ -54,11 +60,11 @@ const VendorList = () => {
 
     useEffect(() => {
         getUserList();
-    }, [])
+    }, [isEditUserNotification])
 
-    const handleDeleteProduct = async (id: string | undefined) => {
+    const handleDeleteUser = async (id: string | undefined) => {
         if (!id) {
-            console.log("product id is null..")
+            console.log("user id is null..")
             return;
         }
         const token = localStorage.getItem("token");
@@ -68,12 +74,12 @@ const VendorList = () => {
             return;
         }
         try {
-            const result = await axiosConnection.post(DELETE_PRODUCT_URL, {}, {
+            const result = await axiosConnection.post(DELETE_USER_URL, {}, {
                 headers: {
                     "Authorization": "Bearer " + token
                 },
                 params: {
-                    productId: id
+                    userId: id
                 }
             })
         }
@@ -89,11 +95,14 @@ const VendorList = () => {
 
 
     return (
-        <div className={`${isDeleteNotification ? "bg-black/52" : "bg-stone-100"} relative flex flex-col gap-4 px-5 w-full min-h-full max-h-full  overflow-hidden`}>
+        <div className={`${isDeleteNotification || isEditUserNotification ? "bg-black/52" : "bg-stone-100"} relative flex flex-col gap-4 px-5 w-full min-h-full max-h-full  overflow-hidden`}>
             <div className={`${!isDeleteNotification ? "opacity-0 scale-80" : "opacity-100 scale-100"} absolute top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2 transition-all duration-300`}>
-                <Popup heading="Delete Product?" message={`Are you sure you want to delete this '${deleteUser?.name}'`} setIsDeleteNotification={setIsDeleteNotification} handleDelete={handleDeleteProduct} deleteId={deleteUser?._id} />
+                <Popup heading="Delete User?" message={`Are you sure you want to delete this '${deleteUser?.name}'`} setIsDeleteNotification={setIsDeleteNotification} handleDelete={handleDeleteUser} deleteId={deleteUser?._id} />
             </div>
-            <div className={`relative flex grow flex-col p-3 min-h-full ${isDeleteNotification && "brightness-50 pointer-events-none"}`}>
+            <div className={`${!isEditUserNotification ? "max-w-0" : 'max-w-200 w-120'} absolute max-h-full  overflow-auto bg-stone-100 right-0 z-40 border-black duration-200 ease-linear`}>
+                <EditVendor editUser={editUser} setEditUser={setEditUser} setIsEditUserNotification={setIsEditUserNotification} />
+            </div>
+            <div className={`relative flex grow flex-col p-3 min-h-full ${(isDeleteNotification || isEditUserNotification) && "brightness-50 pointer-events-none"}`}>
                 <div className='flex  bg-stone-100 justify-end sticky top-0 right-0 p-5 z-10'>
                     <Button title='Create Vendor' type='list-create-category' onClick={() => navigate("/admin/vendor-create")} />
                 </div>
@@ -124,7 +133,11 @@ const VendorList = () => {
                                                 <div className="flex justify-start gap-8 text-2xl">
                                                     {/* <LuView className="cursor-pointer" /> */}
                                                     <HiOutlineViewfinderCircle className='cursor-pointer bg-gray-200 text-gray-700' onClick={() => navigate(`/admin/product-view/${item._id}`)} />
-                                                    <MdEditSquare className="cursor-pointer bg-gray-200 text-blue-400" onClick={() => navigate(`/admin/product-edit/${item._id}`)} />
+                                                    <MdEditSquare className="cursor-pointer bg-gray-200 text-blue-400" onClick={() => {
+                                                        setIsEditUserNotification(!isEditUserNotification);
+                                                        setEditUser(item)
+                                                    }
+                                                    } />
                                                     <RiDeleteBin7Fill className="cursor-pointer  bg-gray-200 text-red-400" onClick={() => {
                                                         setIsDeleteNotification(true);
                                                         setDeleteUser(item)
@@ -137,7 +150,7 @@ const VendorList = () => {
                             </div>
                             :
                             // Currently, No category are available...
-                            <div className='flex justify-center items-center grow '>Currently, No Products are available...</div>
+                            <div className='flex justify-center items-center grow '>Currently, No Vendors are available...</div>
                     }
                 </div>
             </div>

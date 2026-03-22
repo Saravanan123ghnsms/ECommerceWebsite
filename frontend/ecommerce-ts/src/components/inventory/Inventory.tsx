@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { axiosConnection } from '../../axios/axiosConnection';
 import { FaWindowClose } from "react-icons/fa";
+import { CreateGlobalContext } from '../../context/GlobalContextProvider';
 
 
 const ProductList = () => {
@@ -9,6 +10,12 @@ const ProductList = () => {
     const DELETE_PRODUCT_URL = "/api/product/deleteProductByID";
     const REFILL_PRODUCT_URL = "/api/product/refillProductByID";
     const GET_ALL_PRODUCT_URL = "/api/product/getAllProducts";
+
+    const globalContext = useContext(CreateGlobalContext);
+    if (!globalContext) {
+        throw Error("Please verify global context is missing!");
+    }
+    const { showNotification, setShowNotification, notificationDetails, setNotificationDetails } = globalContext;
 
     const navigate = useNavigate();
 
@@ -121,9 +128,29 @@ const ProductList = () => {
                     productId: id
                 }
             })
+
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Success",
+                desc: "Product Refilled Successfully!!!"
+            })
+
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 1000)
         }
-        catch (e) {
-            console.log(e)
+        catch (e: any) {
+            console.log(e);
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Failure",
+                desc: e.response?.data?.message || "Something went wrong"
+            })
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 3000)
         }
         finally {
             setIsRefillNotification(false);

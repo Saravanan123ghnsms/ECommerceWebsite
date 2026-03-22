@@ -9,12 +9,12 @@ const ProductFooter = () => {
         throw new Error("Create Category Context is missing...");
     }
 
-    const { isEditCategory, handleCreateProduct, category } = context;
+    const { isEditCategory, handleCreateProduct, category, isEditProduct } = context;
 
     return (
         <div className='flex p-5 justify-around'>
             <div>save</div>
-            <FormSubmitButton title={`${isEditCategory ? "Edit product" : "create product"}`} />
+            <FormSubmitButton title={`${isEditProduct ? "Edit product" : "create product"}`} />
 
         </div>
 

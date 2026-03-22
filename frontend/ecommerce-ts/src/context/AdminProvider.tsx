@@ -4,7 +4,10 @@ import { RiDashboardFill } from "react-icons/ri";
 import { TbCategoryFilled } from "react-icons/tb";
 import { IoIosShirt } from "react-icons/io";
 import { HiShoppingBag } from "react-icons/hi2";
-import { MdInventory2 } from "react-icons/md";
+import { MdAddToPhotos, MdInventory2 } from "react-icons/md";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
+import { FaUserShield, FaUserTie } from 'react-icons/fa6';
 
 type adminProvierType = {
     children: ReactNode
@@ -116,62 +119,35 @@ const AdminProvider = ({ children }: adminProvierType) => {
         },
         {
             id: 6,
-            name: "Admin",
-            logo: MdInventory2,
+            name: "Customer",
+            logo: FaUser,
             category: "Users",
             isEnabled: true,
             isClicked: false,
-            operations: [
-                {
-                    name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Create",
-                    isClicked: false
-                }
-            ],
+            operations: [],
         },
         {
             id: 7,
             name: "Vendor",
-            logo: MdInventory2,
+            logo: FaUserTie,
             category: "Users",
             isEnabled: true,
             isClicked: false,
-            operations: [
-                {
-                    name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Create",
-                    isClicked: false
-                }
-            ],
+            operations: [],
         },
         {
             id: 8,
-            name: "Customer",
-            logo: MdInventory2,
+            name: "Admin",
+            logo: FaUserShield,
             category: "Users",
             isEnabled: true,
             isClicked: false,
-            operations: [
-                {
-                    name: "List",
-                    isClicked: false
-                },
-                {
-                    name: "Create",
-                    isClicked: false
-                }
-            ],
+            operations: [],
         },
         {
             id: 9,
             name: "MasterCategory",
-            logo: MdInventory2,
+            logo: MdAddToPhotos,
             category: "Others",
             isEnabled: true,
             isClicked: false,

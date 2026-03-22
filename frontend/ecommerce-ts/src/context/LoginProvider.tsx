@@ -121,7 +121,8 @@ const LoginProvider = ({ children }: loginProviderType) => {
             })
             setIsLoginSuccess(true);
             setTimeout(() => {
-                navigate("/admin/dashboard")
+                navigate("/admin/dashboard");
+                setIsLoginSuccess(false);
             }, 1000)
         }
         catch (error: any) {

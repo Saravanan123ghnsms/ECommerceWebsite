@@ -5,6 +5,8 @@ import Button from '../../common/Button';
 import FormSubmitButton from '../../common/FormSubmitButton';
 import { axiosConnection } from '../../../axios/axiosConnection';
 import { useNavigate } from 'react-router';
+import { FaAngleDoubleLeft } from "react-icons/fa";
+import VendorHeader from './VendorHeader';
 
 const CreateVendor = () => {
 
@@ -36,7 +38,7 @@ const CreateVendor = () => {
                 },
             })
             console.log(result);
-            navigate("/admin/vendor-list");
+            navigate("/admin/vendor");
 
         }
         catch (e) {
@@ -47,8 +49,9 @@ const CreateVendor = () => {
     const [userProfileImage, setUserProfileImage] = useState<any>();
 
     return (
-        <div className='bg-stone-100 min-h-full'>
-            <form className='pt-10 px-5 flex flex-col gap-5' onSubmit={(e) => { handleCreateUser(e, undefined) }}>
+        <div className='bg-stone-100 min-h-full flex flex-col'>
+            <VendorHeader />
+            <form className='pt-2 px-5 flex flex-col gap-5' onSubmit={(e) => { handleCreateUser(e, undefined) }}>
                 <div className='relative bg-[url(UserProfileImage)] flex justify-center h-50 bg-cover rounded'
                     style={{ backgroundImage: `url(${UserProfileImage})` }}
                 >

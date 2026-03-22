@@ -1,6 +1,7 @@
-import { createContext, use, useState, type ReactNode } from 'react';
+import { createContext, use, useContext, useState, type ReactNode } from 'react';
 import { axiosConnection } from '../axios/axiosConnection';
 import { useNavigate } from 'react-router';
+import { CreateGlobalContext } from './GlobalContextProvider';
 
 // type metadataType = {
 //     id: number,
@@ -104,7 +105,13 @@ const defaultCategory: categoryType = {
 
 const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const globalContext = useContext(CreateGlobalContext);
+    if (!globalContext) {
+        throw Error("Please verify global context is missing!");
+    }
+    const { showNotification, setShowNotification, notificationDetails, setNotificationDetails } = globalContext;
 
     const CREATE_CATEGORY_URL = "/api/category/addCategory";
     const UPDATE_CATEGORY_URL = "/api/category/updateCategory";
@@ -127,9 +134,6 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
 
     const [metadataAction, setMetadataAction] = useState<metadataActionType>("List");
 
-   
-
-
     const [isShow, setIsShow] = useState<isShowType>({
         generalInfo: false,
         imageInfo: false,
@@ -144,7 +148,6 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
 
     const handleAddMetaData = (e: React.MouseEvent<HTMLButtonElement>
     ) => {
-        console.log(":::jsdjhdjfghb")
         e.preventDefault();
         const newMetaData: metadataType = {
             // _id: metadata.length > 0 ? metadata[metadata.length - 1]._id + 1 : 1,
@@ -203,11 +206,36 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
                 }
             })
             console.log(result);
-            navigate("/admin/category-list");
-
+            setShowNotification(true);
+            if (!isEditCategory) {
+                setNotificationDetails({
+                    status: "Success",
+                    desc: "Category Created Successfully!!!"
+                })
+            }
+            else {
+                setNotificationDetails({
+                    status: "Success",
+                    desc: "Category Edited Successfully!!!"
+                })
+            }
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+                navigate("/admin/category-list");
+            }, 1000)
         }
-        catch (e) {
+        catch (e: any) {
             console.log(e);
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Failure",
+                desc: e.response?.data?.message || "Something went wrong"
+            })
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 3000)
         }
 
     }
@@ -236,7 +264,7 @@ const CreateCategoryProvider = ({ children }: createCategoryProviderType) => {
             setCategoryMetadataNotification,
             category,
             setCategory,
-           
+
             // editMetaDataTitle,
             // setEditMetadataTitle,
             // editMetadataValues,

@@ -34,7 +34,7 @@ const MasterCategoryMainPage = () => {
                     masterCategoryAction === 'List' ?
                         <MasterCategoryList setMasterCategoryAction={setMasterCategoryAction} setEditMasterCategoryId={setEditMasterCategoryId} />
                         :
-                        < CreateMasterCategory setMasterCategoryAction={setMasterCategoryAction} editMasterCategoryId={editMasterCategoryId} />
+                        < CreateMasterCategory setEditMasterCategoryId={setEditMasterCategoryId} setMasterCategoryAction={setMasterCategoryAction} editMasterCategoryId={editMasterCategoryId} />
 
                 }
             </div>

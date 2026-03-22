@@ -4,10 +4,19 @@ import { IoIosNotifications } from "react-icons/io";
 import { IoSettings } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { FaAlignLeft } from "react-icons/fa";
+import GlobalNotification from "../common/GlobalNotification";
+import { useContext } from "react";
+import { CreateGlobalContext } from "../../context/GlobalContextProvider";
 
 const Header = () => {
+
+    const globalContext = useContext(CreateGlobalContext);
+    if (!globalContext) {
+        throw Error("Please verify global context is missing!");
+    }
+    const { showNotification, setShowNotification, notificationDetails, setNotificationDetails } = globalContext;
     return (
-        <div className="flex bg-stone-50 drop-shadow-md z-20">
+        <div className="relative flex bg-stone-50 drop-shadow-md z-20">
             <div className="p-5 flex gap-4 w-70 customBgColor text-gray-300">
                 <div className="text-3xl">{<FaOpencart />}</div>
                 <div className="text-xl">Ecommerce</div>
@@ -34,6 +43,12 @@ const Header = () => {
                     <div><CgProfile className="text-3xl cursor-pointer" /></div>
                 </div>
             </div>
+            {
+                showNotification &&
+                <div className="absolute right-0 -bottom-10">
+                    <GlobalNotification />
+                </div>
+            }
         </div>
     )
 }

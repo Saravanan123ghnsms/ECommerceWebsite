@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '../common/Button'
 import { axiosConnection } from '../../axios/axiosConnection'
+import { CreateGlobalContext } from '../../context/GlobalContextProvider';
 
 type metadataActionType = "List" | "Create";
 
 type CreateMasterCategoryType = {
     setMasterCategoryAction: React.Dispatch<React.SetStateAction<metadataActionType>>,
-    editMasterCategoryId: string | null
+    editMasterCategoryId: string | null,
+    setEditMasterCategoryId: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-const CreateMasterCategory = ({ setMasterCategoryAction, editMasterCategoryId }: CreateMasterCategoryType) => {
+const CreateMasterCategory = ({ setMasterCategoryAction, editMasterCategoryId, setEditMasterCategoryId }: CreateMasterCategoryType) => {
+
+    const globalContext = useContext(CreateGlobalContext);
+    if (!globalContext) {
+        throw Error("Please verify global context is missing!");
+    }
+    const { showNotification, setShowNotification, notificationDetails, setNotificationDetails } = globalContext;
 
     const CREATE_MASTER_CATEGORY_URL = "/api/mastercategory/addMasterCategory";
-
+    const UPDATE_MASTER_CATEGORY_URL = "/api/mastercategory/updateMasterCategory";
     const GET_MASTER_CATEGORY_URL = "api/mastercategory/getMasterCategory";
 
     useEffect(() => {
@@ -62,37 +70,71 @@ const CreateMasterCategory = ({ setMasterCategoryAction, editMasterCategoryId }:
 
     const [masterCategory, setMasterCategory] = useState(initialMasterCategory)
 
-    const handleCreateMasterCategory = async (e: React.FormEvent<HTMLFormElement>, id?: string | null) => {
+    const handleCreateMasterCategory = async (
+        e: React.FormEvent<HTMLFormElement>,
+        id?: string | null
+    ) => {
         e.preventDefault();
+
         const token = localStorage.getItem("token");
         if (!token) {
-            console.log("Bearer Token is missing...")
+            console.error("Bearer Token is missing...");
             return;
         }
 
-        if (id !== null) {
-            try {
-                const result = await axiosConnection.post(CREATE_MASTER_CATEGORY_URL,
-                    {
-                        name: masterCategory.name,
-                        description: masterCategory.description,
-                        isActive: masterCategory.isActive
-                    },
-                    {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    })
-                setMasterCategoryAction("List")
-            }
-            catch (e) {
-                console.log(e)
-            }
-        }
-        else {
+        const requestBody: { name: string; description: string; isActive: boolean } & { id?: string } = {
+            name: masterCategory.name,
+            description: masterCategory.description,
+            isActive: masterCategory.isActive
+        };
 
+        try {
+            const url = id ? UPDATE_MASTER_CATEGORY_URL : CREATE_MASTER_CATEGORY_URL;
+
+            const config = {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                ...(id ? { params: { masterCategoryId: id } } : {})
+            };
+
+            const result = await axiosConnection.post(url, requestBody, config);
+
+            console.log("Master Category saved:", result.data);
+
+            setShowNotification(true);
+            if (!id) {
+                setNotificationDetails({
+                    status: "Success",
+                    desc: "Master Category Created Successfully!!!"
+                })
+            }
+            else {
+                setNotificationDetails({
+                    status: "Success",
+                    desc: "Master Category Edited Successfully!!!"
+                });
+                setEditMasterCategoryId(null)
+            }
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+                setMasterCategoryAction("List");
+            }, 1000)
+
+        } catch (error: any) {
+            console.error("Error saving master category:", error);
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Failure",
+                desc: error.response?.data?.message || "Something went wrong"
+            })
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 3000)
         }
-    }
+    };
 
     return (
         <div className='min-h-full w-full flex justify-center items-center'>
@@ -104,7 +146,7 @@ const CreateMasterCategory = ({ setMasterCategoryAction, editMasterCategoryId }:
                     <input type='text' required placeholder='Name' name='name' className='border p-3 rounded'
                         value={masterCategory.name} onChange={(e) => setMasterCategory({ ...masterCategory, name: e.target.value })} />
                     <select required name='isActive' className="border p-3 rounded" value={`${masterCategory.isActive}`} onChange={(e) => setMasterCategory({ ...masterCategory, isActive: e.target.value === "Active" ? true : false })}>
-                        <option disabled selected>Select Status</option>
+                        <option disabled>Select Status</option>
                         <option value={"true"}>Active</option>
                         <option value={"false"}>InActive</option>
                     </select>

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { MdEditSquare } from 'react-icons/md';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
 import { axiosConnection } from '../../axios/axiosConnection';
 import Popup from '../common/Popup';
+import { CreateGlobalContext } from '../../context/GlobalContextProvider';
 
 type metadataActionType = "List" | "Create";
 
@@ -21,6 +22,12 @@ const MasterCategoryList = ({ setMasterCategoryAction, setEditMasterCategoryId }
     const DELETE_MASTER_CATEGORY_URL = "/api/mastercategory/deleteMasterCategory";
 
     const navigate = useNavigate();
+
+    const globalContext = useContext(CreateGlobalContext);
+    if (!globalContext) {
+        throw Error("Please verify global context is missing!");
+    }
+    const { showNotification, setShowNotification, notificationDetails, setNotificationDetails } = globalContext;
 
     type masterCategoryType = {
         _id: string,
@@ -80,9 +87,28 @@ const MasterCategoryList = ({ setMasterCategoryAction, setEditMasterCategoryId }
                     masterCategoryId: id
                 }
             })
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Success",
+                desc: "Master Category Deleted Successfully!!!"
+            })
+
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 1000)
         }
-        catch (e) {
-            console.log(e)
+        catch (e: any) {
+            console.log(e);
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Failure",
+                desc: e.response?.data?.message || "Something went wrong"
+            })
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 3000)
         }
         finally {
             setIsDeleteNotification(false);

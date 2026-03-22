@@ -42,12 +42,12 @@ function App() {
           {/* Inventory */}
           <Route path="inventory" element={<Inventory />} />
 
-          {/* Vendor */}
+          {/* Users */}
           {/* <Route path="product-create" element={<ProductsMainPage />} /> */}
-          <Route path="vendor-list" element={<VendorList />} />
+          <Route path=":userType" element={<VendorList />} />
           <Route path="vendor-create" element={<CreateVendor />} />
-          {/* <Route path="product-view/:id" element={<ViewProduct />} />
-          <Route path="product-edit/:id" element={<ProductsMainPage />} /> */}
+          {/* <Route path="admin-user" element={<VendorList />} />
+          <Route path="customer" element={<VendorList />} /> */}
 
         </Route>
       </Routes>

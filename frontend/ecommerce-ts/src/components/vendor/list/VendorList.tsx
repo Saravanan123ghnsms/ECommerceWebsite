@@ -2,19 +2,24 @@ import { useEffect, useState } from 'react';
 import { HiOutlineViewfinderCircle } from "react-icons/hi2";
 import { MdEditSquare } from "react-icons/md";
 import { RiDeleteBin7Fill } from "react-icons/ri";
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { axiosConnection } from '../../../axios/axiosConnection';
 import Button from '../../common/Button';
 import Popup from '../../common/Popup';
 import EditVendor from './EditVendor';
+import ViewVendor from './ViewVendor';
 
 
 const VendorList = () => {
 
     const DELETE_USER_URL = "/api/user/deleteUser";
-    const GET_ALL_USER_URL = "/api/user/getAllUser?role=seller";
+    const GET_ALL_VENDOR_URL = "/api/user/getAllUser?role=seller";
+    const GET_ALL_ADMIN_URL = "/api/user/getAllUser?role=admin";
+    const GET_ALL_CUSTOMER_URL = "/api/user/getAllUser?role=customer";
 
     const navigate = useNavigate();
+
+    const { userType } = useParams();
 
     type userType = {
         _id: string,
@@ -37,6 +42,10 @@ const VendorList = () => {
 
     const [editUser, setEditUser] = useState<userType | null>(null);
 
+    const [isViewUserNotification, setIsViewUserNotification] = useState(false);
+
+    const [viewUser, setViewUser] = useState<userType | null>(null);
+
     const [deleteUser, setDeleteUser] = useState<userType | null>(null);
 
     const getUserList = async () => {
@@ -46,7 +55,9 @@ const VendorList = () => {
             return;
         }
         try {
-            const result = await axiosConnection.get(GET_ALL_USER_URL, {
+            console.log(userType + "  -- usertype")
+            const USER_URL = userType === 'admin-user' ? GET_ALL_ADMIN_URL : userType === "vendor" ? GET_ALL_VENDOR_URL : GET_ALL_CUSTOMER_URL;
+            const result = await axiosConnection.get(USER_URL, {
                 headers: {
                     "Authorization": "Bearer " + token
                 }
@@ -60,7 +71,7 @@ const VendorList = () => {
 
     useEffect(() => {
         getUserList();
-    }, [isEditUserNotification])
+    }, [isEditUserNotification, userType])
 
     const handleDeleteUser = async (id: string | undefined) => {
         if (!id) {
@@ -95,16 +106,19 @@ const VendorList = () => {
 
 
     return (
-        <div className={`${isDeleteNotification || isEditUserNotification ? "bg-black/52" : "bg-stone-100"} relative flex flex-col gap-4 px-5 w-full min-h-full max-h-full  overflow-hidden`}>
+        <div className={`${isDeleteNotification || isEditUserNotification || isViewUserNotification ? "bg-black/52" : "bg-stone-100"} relative flex flex-col gap-4 px-5 w-full min-h-full max-h-full  overflow-hidden`}>
             <div className={`${!isDeleteNotification ? "opacity-0 scale-80" : "opacity-100 scale-100"} absolute top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2 transition-all duration-300`}>
                 <Popup heading="Delete User?" message={`Are you sure you want to delete this '${deleteUser?.name}'`} setIsDeleteNotification={setIsDeleteNotification} handleDelete={handleDeleteUser} deleteId={deleteUser?._id} />
             </div>
             <div className={`${!isEditUserNotification ? "max-w-0" : 'max-w-200 w-120'} absolute max-h-full  overflow-auto bg-stone-100 right-0 z-40 border-black duration-200 ease-linear`}>
                 <EditVendor editUser={editUser} setEditUser={setEditUser} setIsEditUserNotification={setIsEditUserNotification} />
             </div>
-            <div className={`relative flex grow flex-col p-3 min-h-full ${(isDeleteNotification || isEditUserNotification) && "brightness-50 pointer-events-none"}`}>
+            <div className={`absolute top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2`}>
+                <ViewVendor isViewUserNotification={isViewUserNotification} setIsViewUserNotification={setIsViewUserNotification} viewUser={viewUser} />
+            </div>
+            <div className={`relative flex grow flex-col p-3 min-h-full ${(isDeleteNotification || isEditUserNotification || isViewUserNotification) && "brightness-50 pointer-events-none"}`}>
                 <div className='flex  bg-stone-100 justify-end sticky top-0 right-0 p-5 z-10'>
-                    <Button title='Create Vendor' type='list-create-category' onClick={() => navigate("/admin/vendor-create")} />
+                    <Button title={`${userType === 'customer' ? "Create Customer" : userType === "vendor" ? "Create Vendor" : "Create Admin"}`} type='list-create-category' onClick={() => navigate("/admin/vendor-create")} />
                 </div>
                 <div className='relative flex flex-col grow bg-white rounded-md mb-2 min-h-full border'>
                     <div className='font-semibold p-5 w-full grid gap-2 grid-cols-[100px_200px_250px_200px_1fr_1fr] rounded-tr-md rounded-tl-md bg-gray-300 overflow-hidden sticky top-21 right-0 z-10'>
@@ -132,7 +146,10 @@ const VendorList = () => {
                                                 <div>{item.status ? item.status : "-"}</div>
                                                 <div className="flex justify-start gap-8 text-2xl">
                                                     {/* <LuView className="cursor-pointer" /> */}
-                                                    <HiOutlineViewfinderCircle className='cursor-pointer bg-gray-200 text-gray-700' onClick={() => navigate(`/admin/product-view/${item._id}`)} />
+                                                    <HiOutlineViewfinderCircle className='cursor-pointer bg-gray-200 text-gray-700' onClick={() => {
+                                                        setIsViewUserNotification(true);
+                                                        setViewUser(item)
+                                                    }} />
                                                     <MdEditSquare className="cursor-pointer bg-gray-200 text-blue-400" onClick={() => {
                                                         setIsEditUserNotification(!isEditUserNotification);
                                                         setEditUser(item)

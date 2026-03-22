@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { HiOutlineViewfinderCircle } from "react-icons/hi2";
 import { MdEditSquare } from "react-icons/md";
 import { RiDeleteBin7Fill } from "react-icons/ri";
@@ -6,11 +6,18 @@ import { useNavigate } from 'react-router';
 import { axiosConnection } from '../../../axios/axiosConnection';
 import Button from '../../common/Button';
 import Popup from '../../common/Popup';
+import { CreateGlobalContext } from '../../../context/GlobalContextProvider';
 
 const CategoryList = () => {
 
     const DELETE_CATEGORY_URL = "/api/category/deleteCategory";
     const GET_ALL_CATEGORY_URL = "/api/category/getAllCategory";
+
+    const globalContext = useContext(CreateGlobalContext);
+    if (!globalContext) {
+        throw Error("Please verify global context is missing!");
+    }
+    const { showNotification, setShowNotification, notificationDetails, setNotificationDetails } = globalContext;
 
     const navigate = useNavigate();
 
@@ -86,9 +93,29 @@ const CategoryList = () => {
                     CategoryId: id
                 }
             })
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Success",
+                desc: "Category Deleted Successfully!!!"
+            })
+
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+                // navigate("/admin/category-list");
+            }, 1000)
         }
-        catch (e) {
+        catch (e: any) {
             console.log(e)
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Failure",
+                desc: e.response?.data?.message || "Something went wrong"
+            })
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 3000)
         }
         finally {
             setIsDeleteNotification(false);
@@ -130,7 +157,7 @@ const CategoryList = () => {
                                                 </div>
                                                 <div>{item.isActive ? "Active" : "InActive"}</div>
                                                 <div>{0}</div>
-                                                <div>{item.masterCategory.name}</div>
+                                                <div>{item.masterCategory?.name ?? "-"}</div>
                                                 <div className="flex justify-start gap-8 text-2xl">
                                                     {/* <LuView className="cursor-pointer" /> */}
                                                     <HiOutlineViewfinderCircle className='cursor-pointer bg-gray-200 text-gray-700' onClick={() => navigate(`/admin/category-view/${item._id}`)} />

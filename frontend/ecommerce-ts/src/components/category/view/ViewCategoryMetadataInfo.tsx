@@ -35,11 +35,11 @@ const ViewCategoryMetadataInfo = ({ category }: ViewCategoryMetadataInfoProp) =>
                 <div className="flex flex-col gap-6 customColor p-4 rounded-r-sm rounded-bl-sm">
                     <div className="flex flex-col gap-1">
                         <label>Name</label>
-                        <input type="text" readOnly value={category?.masterCategory.name} className="w-full border p-2  text-gray-600 rounded" />
+                        <input type="text" readOnly value={category?.masterCategory?.name} className="w-full border p-2  text-gray-600 rounded" />
                     </div>
                     <div className="flex flex-col gap-1">
                         <label>Status</label>
-                        <input type="text" readOnly value={category?.masterCategory.isActive ? "Active" : "InActive"} className="w-full border p-2  text-gray-600 rounded" />
+                        <input type="text" readOnly value={category?.masterCategory?.isActive ? "Active" : "InActive"} className="w-full border p-2  text-gray-600 rounded" />
                     </div>
                     <div className="flex flex-col gap-1">
                         <label>Description</label>

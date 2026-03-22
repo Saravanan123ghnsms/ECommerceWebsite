@@ -1,6 +1,7 @@
-import { createContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import { axiosConnection } from '../axios/axiosConnection';
 import { useNavigate } from 'react-router';
+import { CreateGlobalContext } from './GlobalContextProvider';
 
 // type metadataType = {
 //     id: number,
@@ -9,7 +10,7 @@ import { useNavigate } from 'react-router';
 // }
 
 type productType = {
-    _id?:string,
+    _id?: string,
     name: string,
     description: string,
     originalPrice: number | null,
@@ -137,7 +138,7 @@ const defaultCategory: categoryType = {
 };
 
 const defaultProduct: productType = {
-    _id:"",
+    _id: "",
     name: "",
     description: "",
     originalPrice: null,
@@ -152,7 +153,12 @@ const defaultProduct: productType = {
 
 const CreateProductProvider = ({ children }: createCategoryProviderType) => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const globalContext = useContext(CreateGlobalContext);
+    if (!globalContext) {
+        throw Error("Please verify global context is missing!");
+    }
+    const { showNotification, setShowNotification, notificationDetails, setNotificationDetails } = globalContext;
 
     const CREATE_CATEGORY_URL = "/api/category/addCategory";
     const UPDATE_CATEGORY_URL = "/api/category/updateCategory";
@@ -216,7 +222,7 @@ const CreateProductProvider = ({ children }: createCategoryProviderType) => {
             formData.delete("image");
         }
 
-        if(isEditProduct){
+        if (isEditProduct) {
             formData.delete("stock")
         }
 
@@ -240,11 +246,38 @@ const CreateProductProvider = ({ children }: createCategoryProviderType) => {
                 }
             })
             console.log(result);
-            navigate("/admin/product-list");
+
+            setShowNotification(true);
+            if (!isEditProduct) {
+                setNotificationDetails({
+                    status: "Success",
+                    desc: "Product Created Successfully!!!"
+                })
+            }
+            else {
+                setNotificationDetails({
+                    status: "Success",
+                    desc: "Product Edited Successfully!!!"
+                })
+            }
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+                navigate("/admin/product-list");
+            }, 1000)
 
         }
-        catch (e) {
+        catch (e: any) {
             console.log(e);
+            setShowNotification(true);
+            setNotificationDetails({
+                status: "Failure",
+                desc: e.response?.data?.message || "Something went wrong"
+            })
+            setTimeout(() => {
+                setShowNotification(false);
+                setNotificationDetails(null)
+            }, 3000)
         }
 
     }

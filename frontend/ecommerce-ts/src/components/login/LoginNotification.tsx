@@ -10,10 +10,10 @@ const LoginNotification = () => {
   }
   const { isRegisterSuccess, registerStatus, isLoginSuccess } = context;
   return (
-    <div className={`${isRegisterSuccess ? "registerNotification" : isLoginSuccess ? "loginNotification" : ""}`}>
+    <div className={`${isRegisterSuccess ? "registerNotification" : isLoginSuccess ? "loginNotification" : ""} ${registerStatus.status === 'Success' ? "bg-green-50 border-green-300 border-1" : "bg-red-50 border-red-300 border-1"}`}>
       <div className='notifyMsg' style={{ paddingTop: ".8rem", paddingInline: "1rem" }}>
         <div>
-          <h2 style={{ marginBottom: "5px", }}>{registerStatus.status}</h2>
+          <h2 style={{ marginBottom: "5px" }} className={`${registerStatus.status === 'Success' ? "text-green-600" : "text-red-500"} font-black text-lg`}>{registerStatus.status}</h2>
           <p style={{ marginBottom: "10px" }}>{registerStatus.desc}</p>
         </div>
         <div style={{ display: "flex", justifyContent: "end" }}>
